@@ -13,10 +13,8 @@ import {
   Calendar,
   Calculator,
   ArrowRight,
-  Play,
   MessageCircle,
   Mic,
-  Phone
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -58,30 +56,10 @@ export const Home: React.FC = () => {
   ];
 
   const features = [
-    {
-      icon: Bot,
-      title: "AI Receptionist",
-      description: "24/7 intelligent assistance for all your car shopping needs",
-      link: "/ai-receptionist"
-    },
-    {
-      icon: Calendar,
-      title: "Easy Booking",
-      description: "Schedule test drives with our seamless booking system",
-      link: "/test-drive"
-    },
-    {
-      icon: Calculator,
-      title: "Finance Calculator",
-      description: "Calculate payments and explore financing options instantly",
-      link: "/finance"
-    },
-    {
-      icon: Award,
-      title: "Premium Service",
-      description: "White-glove service and luxury amenities included",
-      link: "/services"
-    }
+    { icon: Bot, title: "AI Receptionist", description: "24/7 intelligent assistance for all your car shopping needs", link: "/ai-receptionist" },
+    { icon: Calendar, title: "Easy Booking", description: "Schedule test drives with our seamless booking system", link: "/test-drive" },
+    { icon: Calculator, title: "Finance Calculator", description: "Calculate payments and explore financing options instantly", link: "/finance" },
+    { icon: Award, title: "Premium Service", description: "White-glove service and luxury amenities included", link: "/services" }
   ];
 
   const stats = [
@@ -110,9 +88,9 @@ export const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900">
+
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Slides */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -131,7 +109,6 @@ export const Home: React.FC = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Content */}
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -165,7 +142,6 @@ export const Home: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Navigation Arrows */}
         <button
           onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
           className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all duration-300"
@@ -180,15 +156,12 @@ export const Home: React.FC = () => {
           <ChevronRight className="w-6 h-6" />
         </button>
 
-        {/* Slide Indicators */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
           {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide ? 'bg-cyan-400' : 'bg-white/30'
-              }`}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-cyan-400' : 'bg-white/30'}`}
             />
           ))}
         </div>
@@ -207,21 +180,21 @@ export const Home: React.FC = () => {
               Find Your Dream Car
             </h2>
             
-            <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">
-              <div className="relative">
+            <form onSubmit={handleSearch} className="flex max-w-2xl mx-auto">
+              <div className="relative flex-1">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by make, model, year, or type..."
-                  className="w-full px-6 py-4 pl-12 bg-white/10 backdrop-blur-sm border border-gray-600 rounded-full text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  className="w-full px-6 py-4 pl-12 bg-white/10 backdrop-blur-sm border border-gray-600 rounded-l-full text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
               
               <Button
                 type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2"
+                className="px-6 py-4 rounded-r-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold"
               >
                 Search
               </Button>
@@ -401,11 +374,7 @@ export const Home: React.FC = () => {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${
-                          i < testimonial.rating 
-                            ? 'text-yellow-400 fill-current' 
-                            : 'text-gray-600'
-                        }`}
+                        className={`w-4 h-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-600'}`}
                       />
                     ))}
                   </div>
@@ -462,87 +431,44 @@ export const Home: React.FC = () => {
       <AnimatePresence>
         {showChatbot && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="fixed bottom-24 right-6 z-50 w-80 h-96 bg-gray-900/95 backdrop-blur-md border border-gray-700/50 rounded-xl shadow-2xl"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-6 right-6 w-96 bg-gray-900 rounded-xl shadow-lg z-50 overflow-hidden"
           >
-            <div className="p-4 border-b border-gray-700/50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Bot className="w-6 h-6 text-cyan-400" />
-                  <span className="text-white font-semibold">AI Assistant</span>
-                </div>
-                <button
-                  onClick={() => setShowChatbot(false)}
-                  className="text-gray-400 hover:text-white"
-                >
-                  ×
-                </button>
-              </div>
+            <div className="flex justify-between items-center p-4 bg-gray-800">
+              <h4 className="text-white font-semibold">AI Assistant</h4>
+              <button onClick={() => setShowChatbot(false)} className="text-gray-400 hover:text-white">✕</button>
             </div>
-            
-            <div className="p-4 h-64 overflow-y-auto">
-              <div className="bg-gray-800/50 rounded-lg p-3 mb-4">
-                <p className="text-white text-sm">
-                  Hello! I'm your AI assistant. How can I help you find your perfect car today?
-                </p>
-              </div>
+            <div className="p-4 h-80 overflow-y-auto">
+              <p className="text-gray-400">Chatbot content goes here...</p>
             </div>
-            
-            <div className="p-4 border-t border-gray-700/50">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  placeholder="Type your message..."
-                  className="flex-1 px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                />
-                <button className="p-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors">
-                  <MessageCircle className="w-4 h-4" />
-                </button>
-              </div>
+            <div className="flex items-center p-4 border-t border-gray-700">
+              <input
+                type="text"
+                placeholder="Type your message..."
+                className="flex-1 px-4 py-2 rounded-full bg-gray-800 text-white placeholder-gray-500 focus:outline-none"
+              />
+              <button className="ml-2 p-2 bg-cyan-500 rounded-full hover:bg-cyan-600">
+                <MessageCircle className="w-5 h-5 text-white" />
+              </button>
+              <button
+                onClick={() => setIsVoiceActive(!isVoiceActive)}
+                className={`ml-2 p-2 rounded-full ${isVoiceActive ? 'bg-red-500' : 'bg-gray-700'} hover:bg-red-600`}
+              >
+                <Mic className="w-5 h-5 text-white" />
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col space-y-4">
-        {/* AI Chatbot Toggle */}
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setShowChatbot(!showChatbot)}
-          className="w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-full shadow-lg hover:shadow-cyan-500/25 flex items-center justify-center"
-        >
-          <Bot className="w-6 h-6" />
-        </motion.button>
-
-        {/* Voice Assistant Toggle */}
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setIsVoiceActive(!isVoiceActive)}
-          className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ${
-            isVoiceActive 
-              ? 'bg-gradient-to-r from-pink-500 to-red-600 animate-pulse' 
-              : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:shadow-gray-500/25'
-          }`}
-        >
-          <Mic className="w-6 h-6" />
-        </motion.button>
-
-        {/* Book Test Drive CTA */}
-        <Link to="/test-drive">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="w-14 h-14 bg-gradient-to-r from-pink-500 to-red-600 text-white rounded-full shadow-lg hover:shadow-pink-500/25 flex items-center justify-center"
-          >
-            <Calendar className="w-6 h-6" />
-          </motion.button>
-        </Link>
-      </div>
+      <button
+        onClick={() => setShowChatbot(!showChatbot)}
+        className="fixed bottom-6 right-6 z-40 p-4 bg-cyan-500 rounded-full hover:bg-cyan-600 shadow-lg"
+      >
+        <Bot className="w-6 h-6 text-white" />
+      </button>
     </div>
   );
 };

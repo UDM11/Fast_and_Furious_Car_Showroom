@@ -14,8 +14,12 @@ import { AIReceptionist } from './pages/AIReceptionist';
 import { Finance } from './pages/Finance';
 import { SignIn } from './pages/auth/SignIn';
 import { SignUp } from './pages/auth/SignUp';
-import ForgotPassword from './pages/auth/ForgotPassword';   // ✅ Added ForgotPassword
+import ForgotPassword from './pages/auth/ForgotPassword';
 import ContactUs from './pages/ContactUs';
+import { Services } from './pages/Services'; // Advanced Services page
+import { Maintenance } from './pages/services/Maintenance'; // ✅ Maintenance page
+import { TradeIn } from './pages/services/TradeIn'; // ✅ Trade-In page
+import { Warranty } from './pages/services/Warranty'; // ✅ Warranty page
 
 // Placeholder components for missing pages
 const About = () => (
@@ -31,15 +35,6 @@ const Testimonials = () => (
   <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h1 className="text-4xl font-bold text-white mb-4">Customer Testimonials</h1>
-      <p className="text-xl text-gray-400">This page is under construction. Coming soon!</p>
-    </div>
-  </div>
-);
-
-const Services = () => (
-  <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 className="text-4xl font-bold text-white mb-4">Our Services</h1>
       <p className="text-xl text-gray-400">This page is under construction. Coming soon!</p>
     </div>
   </div>
@@ -71,12 +66,15 @@ function App() {
                 <Route path="/finance" element={<Finance />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/testimonials" element={<Testimonials />} />
-                <Route path="/services" element={<Services />} />
+                <Route path="/services" element={<Services />} /> {/* Services page */}
+                <Route path="/services/maintenance" element={<Maintenance />} /> {/* ✅ Maintenance page */}
+                <Route path="/services/trade-in" element={<TradeIn />} /> {/* ✅ Trade-In page */}
+                <Route path="/services/warranty" element={<Warranty />} /> {/* ✅ Warranty page */}
                 <Route path="/contact" element={<ContactUs />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/auth/signin" element={<SignIn />} />
                 <Route path="/auth/signup" element={<SignUp />} />
-                <Route path="/auth/forgot-password" element={<ForgotPassword />} /> {/* ✅ Added */}
+                <Route path="/auth/forgot-password" element={<ForgotPassword />} />
               </Routes>
             </main>
             <Footer />

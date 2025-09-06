@@ -10,7 +10,10 @@ import {
   Calculator, 
   Phone, 
   User,
-  ChevronDown
+  ChevronDown,
+  Wrench,
+  ArrowRightLeft,
+  Shield // Added shield icon for warranty
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
@@ -49,9 +52,9 @@ export const Navbar: React.FC = () => {
       hasDropdown: true,
       dropdownItems: [
         { name: 'All Services', path: '/services' },
-        { name: 'Maintenance', path: '/services#maintenance' },
-        { name: 'Trade-In', path: '/services#trade-in' },
-        { name: 'Warranty', path: '/services#warranty' }
+        { name: 'Maintenance', path: '/services/maintenance', icon: Wrench },
+        { name: 'Trade-In', path: '/services/trade-in', icon: ArrowRightLeft },
+        { name: 'Warranty', path: '/services/warranty', icon: Shield } // Updated path
       ]
     },
     { name: 'Contact', path: '/contact', icon: Phone }
@@ -71,7 +74,6 @@ export const Navbar: React.FC = () => {
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"> & </span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">Furious</span>
                 </h1>
-                {/* <p className="text-xs text-gray-400">Car Showroom</p> */}
               </div>
             </div>
           </Link>
@@ -108,8 +110,9 @@ export const Navbar: React.FC = () => {
                             <Link
                               key={subItem.name}
                               to={subItem.path}
-                              className="block px-4 py-2 text-sm text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 first:rounded-t-lg last:rounded-b-lg transition-colors duration-200"
+                              className="flex items-center px-4 py-2 text-sm text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 first:rounded-t-lg last:rounded-b-lg transition-colors duration-200"
                             >
+                              {subItem.icon && <subItem.icon className="w-4 h-4 mr-2" />}
                               {subItem.name}
                             </Link>
                           ))}
@@ -213,8 +216,10 @@ export const Navbar: React.FC = () => {
                               <Link
                                 key={subItem.name}
                                 to={subItem.path}
-                                className="block text-sm text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+                                className="flex items-center text-sm text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+                                onClick={() => setIsOpen(false)}
                               >
+                                {subItem.icon && <subItem.icon className="w-4 h-4 mr-2" />}
                                 {subItem.name}
                               </Link>
                             ))}
@@ -230,6 +235,7 @@ export const Navbar: React.FC = () => {
                           ? 'text-cyan-400'
                           : 'text-gray-300 hover:text-cyan-400'
                       }`}
+                      onClick={() => setIsOpen(false)}
                     >
                       {item.icon && <item.icon className="w-5 h-5" />}
                       <span>{item.name}</span>
@@ -242,12 +248,19 @@ export const Navbar: React.FC = () => {
               <div className="border-t border-gray-700/50 pt-4 mt-6">
                 {user ? (
                   <div className="space-y-4">
-                    <Link to="/account" className="flex items-center space-x-2 text-gray-300 hover:text-cyan-400">
+                    <Link 
+                      to="/account" 
+                      className="flex items-center space-x-2 text-gray-300 hover:text-cyan-400"
+                      onClick={() => setIsOpen(false)}
+                    >
                       <User className="w-5 h-5" />
                       <span>Account</span>
                     </Link>
                     <button
-                      onClick={logout}
+                      onClick={() => {
+                        logout();
+                        setIsOpen(false);
+                      }}
                       className="flex items-center space-x-2 text-gray-300 hover:text-red-400"
                     >
                       <span>Logout</span>
@@ -255,12 +268,12 @@ export const Navbar: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <Link to="/auth/signin">
+                    <Link to="/auth/signin" onClick={() => setIsOpen(false)}>
                       <Button variant="outline" className="w-full py-2">
                         Sign In
                       </Button>
                     </Link>
-                    <Link to="/auth/signup">
+                    <Link to="/auth/signup" onClick={() => setIsOpen(false)}>
                       <Button variant="primary" className="w-full py-2">
                         Sign Up
                       </Button>
