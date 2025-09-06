@@ -1,7 +1,8 @@
+// src/pages/auth/SignUp.tsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Mail, Lock, Eye, EyeOff, Phone, Car } from 'lucide-react';
+import { Eye, EyeOff, Car } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -24,55 +25,49 @@ export const SignUp: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Reset errors
     setErrors({});
-    
-    // Validation
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Full name is required';
     } else if (formData.name.length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
     } else if (!/^\+?[\d\s\-\(\)]+$/.test(formData.phone)) {
       newErrors.phone = 'Please enter a valid phone number';
     }
-    
+
     if (!formData.password.trim()) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     setIsLoading(true);
-    
     try {
       const success = await signup({
         name: formData.name,
         email: formData.email,
         phone: formData.phone
       });
-      
       if (success) {
         navigate('/');
       } else {
@@ -87,20 +82,19 @@ export const SignUp: React.FC = () => {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full"
       >
-        <Card className="p-8">
+        <Card className="p-8 shadow-xl shadow-cyan-900/30">
           {/* Logo and Header */}
           <div className="text-center mb-8">
             <motion.div
@@ -118,10 +112,8 @@ export const SignUp: React.FC = () => {
                 </motion.div>
               </div>
             </motion.div>
-            
-            <h2 className="text-3xl font-bold text-white mb-2">
-              Join Fast & Furious
-            </h2>
+
+            <h2 className="text-3xl font-bold text-white mb-2">Join Fast & Furious</h2>
             <p className="text-gray-400">
               Create your account to access exclusive vehicles
             </p>
@@ -208,6 +200,7 @@ export const SignUp: React.FC = () => {
               </button>
             </div>
 
+            {/* Terms */}
             <div className="flex items-start">
               <div className="flex items-center h-5">
                 <input
@@ -231,29 +224,25 @@ export const SignUp: React.FC = () => {
               </div>
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              size="lg"
-              isLoading={isLoading}
-            >
+            <Button type="submit" className="w-full" size="lg" isLoading={isLoading}>
               Create Account
             </Button>
-
-            <div className="text-center">
-              <p className="text-gray-400">
-                Already have an account?{' '}
-                <Link
-                  to="/auth/signin"
-                  className="text-cyan-400 hover:text-cyan-300 transition-colors font-semibold"
-                >
-                  Sign in
-                </Link>
-              </p>
-            </div>
           </form>
 
-          {/* Additional Benefits */}
+          {/* Sign In Link */}
+          <div className="text-center mt-6">
+            <p className="text-gray-400">
+              Already have an account?{' '}
+              <Link
+                to="/auth/signin"
+                className="text-cyan-400 hover:text-cyan-300 transition-colors font-semibold"
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
+
+          {/* Member Benefits */}
           <div className="mt-8 pt-6 border-t border-gray-700/50">
             <h4 className="text-white font-semibold mb-4 text-center">Member Benefits</h4>
             <div className="space-y-2">

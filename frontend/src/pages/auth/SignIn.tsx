@@ -1,7 +1,8 @@
+// src/pages/auth/SignIn.tsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, Car } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Car, Facebook, Github } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -20,32 +21,27 @@ export const SignIn: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Reset errors
     setErrors({});
-    
-    // Validation
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
     if (!formData.password.trim()) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     setIsLoading(true);
-    
     try {
       const success = await login(formData.email, formData.password);
       if (success) {
@@ -62,20 +58,19 @@ export const SignIn: React.FC = () => {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full"
       >
-        <Card className="p-8">
+        <Card className="p-8 shadow-xl shadow-cyan-900/30">
           {/* Logo and Header */}
           <div className="text-center mb-8">
             <motion.div
@@ -93,13 +88,8 @@ export const SignIn: React.FC = () => {
                 </motion.div>
               </div>
             </motion.div>
-            
-            <h2 className="text-3xl font-bold text-white mb-2">
-              Welcome Back
-            </h2>
-            <p className="text-gray-400">
-              Sign in to your Fast & Furious account
-            </p>
+            <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
+            <p className="text-gray-400">Sign in to your Fast & Furious account</p>
           </div>
 
           {/* Error Message */}
@@ -161,40 +151,54 @@ export const SignIn: React.FC = () => {
               </Link>
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              size="lg"
-              isLoading={isLoading}
-            >
+            <Button type="submit" className="w-full" size="lg" isLoading={isLoading}>
               Sign In
             </Button>
-
-            <div className="text-center">
-              <p className="text-gray-400">
-                Don't have an account?{' '}
-                <Link
-                  to="/auth/signup"
-                  className="text-cyan-400 hover:text-cyan-300 transition-colors font-semibold"
-                >
-                  Sign up
-                </Link>
-              </p>
-            </div>
           </form>
 
-          {/* Demo Account */}
-          <div className="mt-8 pt-6 border-t border-gray-700/50">
-            <div className="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-4">
-              <h4 className="text-cyan-400 font-semibold mb-2">Demo Account</h4>
-              <p className="text-gray-300 text-sm mb-3">
-                Try the platform with demo credentials:
-              </p>
-              <div className="text-sm space-y-1">
-                <p className="text-gray-400">Email: demo@fastfurious.com</p>
-                <p className="text-gray-400">Password: demo123</p>
-              </div>
-            </div>
+          {/* Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-grow border-t border-gray-700"></div>
+            <span className="mx-3 text-gray-400 text-sm">or</span>
+            <div className="flex-grow border-t border-gray-700"></div>
+          </div>
+
+          {/* Social Login Buttons */}
+          <div className="space-y-3">
+            <Button
+              variant="outline"
+              className="w-full flex items-center justify-center gap-2 hover:bg-gray-800"
+              onClick={() => alert("Google login coming soon")}
+            >
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
+              Continue with Google
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full flex items-center justify-center gap-2 hover:bg-gray-800"
+              onClick={() => alert("Facebook login coming soon")}
+            >
+              <Facebook className="w-5 h-5 text-blue-500" />
+              Continue with Facebook
+            </Button>
+          </div>
+
+          {/* Sign Up Link */}
+          <div className="text-center mt-6">
+            <p className="text-gray-400">
+              Don't have an account?{' '}
+              <Link
+                to="/auth/signup"
+                className="text-cyan-400 hover:text-cyan-300 transition-colors font-semibold"
+              >
+                Sign up
+              </Link>
+            </p>
           </div>
         </Card>
       </motion.div>

@@ -55,7 +55,6 @@ export const Footer: React.FC = () => {
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"> & </span>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">Furious</span>
                   </h3>
-                  <p className="text-xs text-gray-400">Car Showroom</p>
                 </div>
               </div>
             </Link>

@@ -14,6 +14,8 @@ import { AIReceptionist } from './pages/AIReceptionist';
 import { Finance } from './pages/Finance';
 import { SignIn } from './pages/auth/SignIn';
 import { SignUp } from './pages/auth/SignUp';
+import ForgotPassword from './pages/auth/ForgotPassword';   // ✅ Added ForgotPassword
+import ContactUs from './pages/ContactUs';
 
 // Placeholder components for missing pages
 const About = () => (
@@ -38,15 +40,6 @@ const Services = () => (
   <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h1 className="text-4xl font-bold text-white mb-4">Our Services</h1>
-      <p className="text-xl text-gray-400">This page is under construction. Coming soon!</p>
-    </div>
-  </div>
-);
-
-const Contact = () => (
-  <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 className="text-4xl font-bold text-white mb-4">Contact Us</h1>
       <p className="text-xl text-gray-400">This page is under construction. Coming soon!</p>
     </div>
   </div>
@@ -79,10 +72,11 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/testimonials" element={<Testimonials />} />
                 <Route path="/services" element={<Services />} />
-                <Route path="/contact" element={<Contact />} />
+                <Route path="/contact" element={<ContactUs />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/auth/signin" element={<SignIn />} />
                 <Route path="/auth/signup" element={<SignUp />} />
+                <Route path="/auth/forgot-password" element={<ForgotPassword />} /> {/* ✅ Added */}
               </Routes>
             </main>
             <Footer />
