@@ -1,3 +1,4 @@
+// src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -16,21 +17,16 @@ import { SignIn } from './pages/auth/SignIn';
 import { SignUp } from './pages/auth/SignUp';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ContactUs from './pages/ContactUs';
-import { Services } from './pages/Services'; // Advanced Services page
-import { Maintenance } from './pages/services/Maintenance'; // ✅ Maintenance page
-import { TradeIn } from './pages/services/TradeIn'; // ✅ Trade-In page
-import { Warranty } from './pages/services/Warranty'; // ✅ Warranty page
+import { Services } from './pages/Services';
+import { Maintenance } from './pages/services/Maintenance';
+import { TradeIn } from './pages/services/TradeIn';
+import { Warranty } from './pages/services/Warranty';
+import { FinancingService } from './pages/services/FinancingService';
+import { ConciergeService } from './pages/services/ConciergeService';
+import { PerformanceUpgrades } from './pages/services/PerformanceUpgrades';
+import { AboutUs } from './pages/AboutUs';
 
 // Placeholder components for missing pages
-const About = () => (
-  <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 className="text-4xl font-bold text-white mb-4">About Fast & Furious</h1>
-      <p className="text-xl text-gray-400">This page is under construction. Coming soon!</p>
-    </div>
-  </div>
-);
-
 const Testimonials = () => (
   <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -64,12 +60,17 @@ function App() {
                 <Route path="/ai-receptionist" element={<AIReceptionist />} />
                 <Route path="/test-drive" element={<TestDrive />} />
                 <Route path="/finance" element={<Finance />} />
-                <Route path="/about" element={<About />} />
+                <Route path="/about" element={<AboutUs />} /> {/* <- AboutUs connected */}
                 <Route path="/testimonials" element={<Testimonials />} />
-                <Route path="/services" element={<Services />} /> {/* Services page */}
-                <Route path="/services/maintenance" element={<Maintenance />} /> {/* ✅ Maintenance page */}
-                <Route path="/services/trade-in" element={<TradeIn />} /> {/* ✅ Trade-In page */}
-                <Route path="/services/warranty" element={<Warranty />} /> {/* ✅ Warranty page */}
+                <Route path="/services" element={<Services />} /> 
+                <Route path="/services/maintenance" element={<Maintenance />} />
+                <Route path="/services/trade-in" element={<TradeIn />} />
+                <Route path="/services/warranty" element={<Warranty />} /> 
+                <Route path="/services/financing" element={<FinancingService />} />
+                <Route path="/services/concierge" element={<ConciergeService />} />
+                <Route path="/services/performance" element={<PerformanceUpgrades />} />
+
+                {/* Additional service routes can be added here */}
                 <Route path="/contact" element={<ContactUs />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/auth/signin" element={<SignIn />} />

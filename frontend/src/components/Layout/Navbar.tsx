@@ -13,7 +13,10 @@ import {
   ChevronDown,
   Wrench,
   ArrowRightLeft,
-  Shield // Added shield icon for warranty
+  Shield,
+  Briefcase,     // for Financing
+  UserCheck,     // for Concierge
+  Zap            // for Performance
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
@@ -54,7 +57,10 @@ export const Navbar: React.FC = () => {
         { name: 'All Services', path: '/services' },
         { name: 'Maintenance', path: '/services/maintenance', icon: Wrench },
         { name: 'Trade-In', path: '/services/trade-in', icon: ArrowRightLeft },
-        { name: 'Warranty', path: '/services/warranty', icon: Shield } // Updated path
+        { name: 'Warranty', path: '/services/warranty', icon: Shield },
+        { name: 'Financing', path: '/services/financing', icon: Briefcase },
+        { name: 'Concierge', path: '/services/concierge', icon: UserCheck },
+        { name: "Performance Upgrades", path: "/services/performance", icon: Zap }
       ]
     },
     { name: 'Contact', path: '/contact', icon: Phone }
@@ -104,7 +110,7 @@ export const Navbar: React.FC = () => {
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
-                          className="absolute top-full left-0 mt-2 w-52 bg-gray-900/95 backdrop-blur-md rounded-lg shadow-xl border border-gray-700/50"
+                          className="absolute top-full left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-md rounded-lg shadow-xl border border-gray-700/50"
                         >
                           {item.dropdownItems?.map((subItem) => (
                             <Link

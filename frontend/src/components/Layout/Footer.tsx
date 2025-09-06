@@ -18,8 +18,17 @@ export const Footer: React.FC = () => {
   const quickLinks = [
     { name: 'About Us', path: '/about' },
     { name: 'Testimonials', path: '/testimonials' },
-    { name: 'Services', path: '/services' },
     { name: 'Contact', path: '/contact' }
+  ];
+
+  const serviceLinks = [
+    { name: 'All Services', path: '/services' },
+    { name: 'Maintenance', path: '/services/maintenance' },
+    { name: 'Trade In', path: '/services/trade-in' },
+    { name: 'Warranty', path: '/services/warranty' },
+    { name: 'Financing', path: '/services/financing' },
+    { name: 'Concierge', path: '/services/concierge' },
+    { name: 'Performance Upgrades', path: '/services/performance' },
   ];
 
   const legalLinks = [
@@ -38,9 +47,9 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-black border-t border-gray-800/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Company Info */}
-          <div className="space-y-6">
+          <div className="space-y-6 lg:col-span-1">
             <Link to="/" className="flex items-center space-x-3">
               <div className="flex items-center space-x-2">
                 <div className="relative">
@@ -82,6 +91,23 @@ export const Footer: React.FC = () => {
             <h3 className="text-white font-semibold text-lg">Quick Links</h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.path}
+                    className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div className="space-y-6">
+            <h3 className="text-white font-semibold text-lg">Services</h3>
+            <ul className="space-y-3">
+              {serviceLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.path}

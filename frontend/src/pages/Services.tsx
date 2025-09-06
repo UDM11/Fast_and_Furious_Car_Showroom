@@ -1,5 +1,6 @@
 // src/pages/Services.tsx
 import React from "react";
+import { Link } from "react-router-dom";
 import { servicesData } from "../data/servicesData";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
@@ -16,12 +17,12 @@ export const Services: React.FC = () => {
         and peace of mind.
       </p>
 
-      {/* Services Grid with Anchors */}
+      {/* Services Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {servicesData.map((service) => (
           <Card
             key={service.id}
-            id={service.title.toLowerCase().replace(/\s+/g, "")}
+            id={service.slug}
             className="p-6 bg-gray-800 rounded-lg border border-gray-700 hover:border-gray-600 transition-all duration-300 flex flex-col justify-between"
           >
             <div className="flex flex-col items-center text-center">
@@ -42,9 +43,11 @@ export const Services: React.FC = () => {
             {/* Price & Button */}
             <div className="flex items-center justify-between mt-4 pt-2 border-t border-gray-700">
               <span className="font-semibold text-white">{service.price}</span>
-              <Button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded border border-gray-600">
-                Learn More
-              </Button>
+              <Link to={`/services/${service.slug}`}>
+                <Button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded border border-gray-600">
+                  Learn More
+                </Button>
+              </Link>
             </div>
           </Card>
         ))}

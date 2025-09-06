@@ -6,6 +6,7 @@ export const servicesData: Service[] = [
     title: 'Luxury Car Maintenance',
     description: 'Premium maintenance services for all luxury vehicles',
     icon: '🔧',
+    slug: "maintenance",
     features: [
       'Certified technicians',
       'OEM parts guarantee',
@@ -20,6 +21,7 @@ export const servicesData: Service[] = [
     title: 'Trade-In Evaluation',
     description: 'Get the best value for your current vehicle',
     icon: '🔄',
+    slug: "trade-in",
     features: [
       'AI-powered valuation',
       'Instant quote generation',
@@ -34,6 +36,7 @@ export const servicesData: Service[] = [
     title: 'Extended Warranty',
     description: 'Comprehensive protection for your investment',
     icon: '🛡️',
+    slug: "warranty",
     features: [
       'Bumper-to-bumper coverage',
       'Roadside assistance 24/7',
@@ -48,6 +51,7 @@ export const servicesData: Service[] = [
     title: 'Custom Financing',
     description: 'Tailored financing solutions for every budget',
     icon: '💰',
+    slug: "financing",
     features: [
       'Competitive interest rates',
       'Flexible terms up to 84 months',
@@ -62,6 +66,7 @@ export const servicesData: Service[] = [
     title: 'Concierge Service',
     description: 'White-glove service for VIP customers',
     icon: '👔',
+    slug: "concierge",
     features: [
       'Personal shopping assistant',
       'Home delivery service',
@@ -76,6 +81,7 @@ export const servicesData: Service[] = [
     title: 'Performance Upgrades',
     description: 'Enhance your vehicle\'s performance and aesthetics',
     icon: '⚡',
+    slug: "performance",
     features: [
       'ECU tuning and remapping',
       'Exhaust system upgrades',
