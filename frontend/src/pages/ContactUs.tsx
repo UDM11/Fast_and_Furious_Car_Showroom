@@ -254,7 +254,7 @@ const ContactUs: React.FC = () => {
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: [0, -3, 0], opacity: 1 }}
               transition={{ repeat: Infinity, duration: 2 }}
-              className="bg-cyan-400 text-black font-semibold px-2 sm:px-3 py-1 rounded-full flex items-center gap-1 sm:gap-2 text-xs sm:text-sm select-none whitespace-nowrap"
+              className="bg-green-500 text-black font-semibold px-2 sm:px-3 py-1 rounded-full flex items-center gap-1 sm:gap-2 text-xs sm:text-sm select-none whitespace-nowrap"
             >
               <MessageCircle size={12} /> WhatsApp
             </motion.div>
@@ -264,7 +264,7 @@ const ContactUs: React.FC = () => {
           href="https://wa.me/9779800000000"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-cyan-400 p-3 sm:p-4 rounded-full shadow-lg hover:scale-110 transition-transform"
+          className="bg-green-500 p-3 sm:p-4 rounded-full shadow-lg hover:scale-110 transition-transform"
           aria-label="Chat on WhatsApp"
         >
           <MessageCircle size={28} color="white" />

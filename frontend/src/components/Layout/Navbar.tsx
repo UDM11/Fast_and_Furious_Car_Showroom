@@ -12,14 +12,24 @@ import {
   User,
   ChevronDown,
   Wrench,
-  ArrowRightLeft,
-  Shield,
-  Briefcase,     // for Financing
-  UserCheck,     // for Concierge
-  Zap            // for Performance
+  Home 
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
+
+type DropdownItem = {
+  name: string;
+  path: string;
+  icon?: React.ElementType;
+};
+
+type NavigationItem = {
+  name: string;
+  path?: string;
+  icon?: React.ElementType;
+  hasDropdown?: boolean;
+  dropdownItems?: DropdownItem[];
+};
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,20 +38,34 @@ export const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
 
+  // Close menus and scroll to top on route change
   useEffect(() => {
     setIsOpen(false);
     setInventoryOpen(false);
     setServicesOpen(false);
+    window.scrollTo(0, 0);
   }, [location]);
 
-  const navigationItems = [
-    { name: 'Home', path: '/' },
+  // Close ALL dropdowns & mobile menu on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsOpen(false);
+      setInventoryOpen(false);
+      setServicesOpen(false);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navigationItems: NavigationItem[] = [
+    { name: 'Home', path: '/', icon: Home }, 
     { 
       name: 'Inventory', 
       path: '/inventory',
+      icon: Car,
       hasDropdown: true,
       dropdownItems: [
-        { name: 'All Vehicles', path: '/inventory' },
+        { name: 'All Vehicles', path: '/inventory' }, 
         { name: 'Sports Cars', path: '/inventory?type=sports' },
         { name: 'SUVs', path: '/inventory?type=suv' },
         { name: 'Sedans', path: '/inventory?type=sedan' }
@@ -52,15 +76,16 @@ export const Navbar: React.FC = () => {
     { name: 'Finance', path: '/finance', icon: Calculator },
     { 
       name: 'Services',
+      icon: Wrench,
       hasDropdown: true,
       dropdownItems: [
         { name: 'All Services', path: '/services' },
-        { name: 'Maintenance', path: '/services/maintenance', icon: Wrench },
-        { name: 'Trade-In', path: '/services/trade-in', icon: ArrowRightLeft },
-        { name: 'Warranty', path: '/services/warranty', icon: Shield },
-        { name: 'Financing', path: '/services/financing', icon: Briefcase },
-        { name: 'Concierge', path: '/services/concierge', icon: UserCheck },
-        { name: "Performance Upgrades", path: "/services/performance", icon: Zap }
+        { name: 'Maintenance', path: '/services/maintenance' },
+        { name: 'Trade-In', path: '/services/trade-in' },
+        { name: 'Warranty', path: '/services/warranty' },
+        { name: 'Financing', path: '/services/financing' },
+        { name: 'Concierge', path: '/services/concierge' },
+        { name: "Performance Upgrades", path: "/services/performance" }
       ]
     },
     { name: 'Contact', path: '/contact', icon: Phone }
@@ -71,21 +96,17 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 sm:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 w-48">
-            <div className="flex items-center space-x-2">
-              <Car className="w-8 h-8 text-cyan-400" />
-              <div>
-                <h1 className="text-base sm:text-lg font-bold">
-                  <span className="text-white">Fast</span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"> & </span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">Furious</span>
-                </h1>
-              </div>
-            </div>
+          <Link to="/" className="flex items-center space-x-2 sm:space-x-3 w-40 sm:w-48">
+            <Car className="w-7 h-7 sm:w-8 sm:h-8 text-cyan-400" />
+            <h1 className="text-base sm:text-lg font-bold">
+              <span className="text-white">Fast</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"> & </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">Furious</span>
+            </h1>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6 text-sm">
+          <div className="hidden lg:flex items-center space-x-6">
             {navigationItems.map((item) => (
               <div key={item.name} className="relative group">
                 {item.hasDropdown ? (
@@ -99,7 +120,8 @@ export const Navbar: React.FC = () => {
                       if (item.name === 'Services') setServicesOpen(false);
                     }}
                   >
-                    <button className="flex items-center space-x-1 text-gray-300 hover:text-cyan-400 transition-colors duration-300 text-sm">
+                    <button className="flex items-center space-x-1 text-gray-300 hover:text-cyan-400 transition-colors duration-300">
+                      {item.icon && <item.icon className="w-4 h-4 mr-1" />}
                       <span>{item.name}</span>
                       <ChevronDown className="w-4 h-4" />
                     </button>
@@ -116,9 +138,8 @@ export const Navbar: React.FC = () => {
                             <Link
                               key={subItem.name}
                               to={subItem.path}
-                              className="flex items-center px-4 py-2 text-sm text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 first:rounded-t-lg last:rounded-b-lg transition-colors duration-200"
+                              className="flex items-center px-4 py-2 text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 first:rounded-t-lg last:rounded-b-lg transition-colors duration-200"
                             >
-                              {subItem.icon && <subItem.icon className="w-4 h-4 mr-2" />}
                               {subItem.name}
                             </Link>
                           ))}
@@ -190,11 +211,11 @@ export const Navbar: React.FC = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800/50"
+            className="lg:hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800/50 overflow-hidden"
           >
-            <div className="px-4 py-6 space-y-4 text-sm">
+            <div className="px-4 py-4 space-y-1">
               {navigationItems.map((item) => (
-                <div key={item.name}>
+                <div key={item.name} className="border-b border-gray-700/30 last:border-b-0">
                   {item.hasDropdown ? (
                     <div>
                       <button
@@ -202,9 +223,12 @@ export const Navbar: React.FC = () => {
                           if (item.name === 'Inventory') setInventoryOpen(!inventoryOpen);
                           if (item.name === 'Services') setServicesOpen(!servicesOpen);
                         }}
-                        className="flex items-center justify-between w-full text-left text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                        className="flex items-center justify-between w-full text-left text-gray-300 hover:text-cyan-400 transition-colors duration-300 py-3"
                       >
-                        <span>{item.name}</span>
+                        <div className="flex items-center space-x-3">
+                          {item.icon && <item.icon className="w-5 h-5" />}
+                          <span className="font-medium">{item.name}</span>
+                        </div>
                         <ChevronDown className={`w-4 h-4 transform transition-transform ${
                           (item.name === 'Inventory' && inventoryOpen) || (item.name === 'Services' && servicesOpen) ? 'rotate-180' : ''
                         }`} />
@@ -216,16 +240,15 @@ export const Navbar: React.FC = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="mt-2 ml-4 space-y-2"
+                            className="ml-6 mb-2 space-y-2"
                           >
                             {item.dropdownItems?.map((subItem) => (
                               <Link
                                 key={subItem.name}
                                 to={subItem.path}
-                                className="flex items-center text-sm text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+                                className="flex items-center py-2 text-gray-400 hover:text-cyan-400 transition-colors duration-200 text-sm"
                                 onClick={() => setIsOpen(false)}
                               >
-                                {subItem.icon && <subItem.icon className="w-4 h-4 mr-2" />}
                                 {subItem.name}
                               </Link>
                             ))}
@@ -236,7 +259,7 @@ export const Navbar: React.FC = () => {
                   ) : (
                     <Link
                       to={item.path || '#'}
-                      className={`flex items-center space-x-2 transition-colors duration-300 ${
+                      className={`flex items-center space-x-3 py-3 transition-colors duration-300 ${
                         location.pathname === item.path
                           ? 'text-cyan-400'
                           : 'text-gray-300 hover:text-cyan-400'
@@ -244,43 +267,51 @@ export const Navbar: React.FC = () => {
                       onClick={() => setIsOpen(false)}
                     >
                       {item.icon && <item.icon className="w-5 h-5" />}
-                      <span>{item.name}</span>
+                      <span className="font-medium">{item.name}</span>
                     </Link>
                   )}
                 </div>
               ))}
               
               {/* Mobile Auth Buttons */}
-              <div className="border-t border-gray-700/50 pt-4 mt-6">
+              <div className="pt-4 mt-2 border-t border-gray-700/50">
                 {user ? (
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <Link 
                       to="/account" 
-                      className="flex items-center space-x-2 text-gray-300 hover:text-cyan-400"
+                      className="flex items-center space-x-3 py-3 text-gray-300 hover:text-cyan-400"
                       onClick={() => setIsOpen(false)}
                     >
                       <User className="w-5 h-5" />
-                      <span>Account</span>
+                      <span className="font-medium">Account</span>
                     </Link>
                     <button
                       onClick={() => {
                         logout();
                         setIsOpen(false);
                       }}
-                      className="flex items-center space-x-2 text-gray-300 hover:text-red-400"
+                      className="flex items-center space-x-3 py-3 w-full text-gray-300 hover:text-red-400"
                     >
-                      <span>Logout</span>
+                      <span className="font-medium">Logout</span>
                     </button>
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    <Link to="/auth/signin" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full py-2">
+                  <div className="space-y-3">
+                    <Link 
+                      to="/auth/signin" 
+                      onClick={() => setIsOpen(false)}
+                      className="block"
+                    >
+                      <Button variant="outline" className="w-full py-3">
                         Sign In
                       </Button>
                     </Link>
-                    <Link to="/auth/signup" onClick={() => setIsOpen(false)}>
-                      <Button variant="primary" className="w-full py-2">
+                    <Link 
+                      to="/auth/signup" 
+                      onClick={() => setIsOpen(false)}
+                      className="block"
+                    >
+                      <Button variant="primary" className="w-full py-3">
                         Sign Up
                       </Button>
                     </Link>
