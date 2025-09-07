@@ -105,7 +105,7 @@ export const Footer: React.FC = () => {
 
           {/* Services */}
           <div className="space-y-6">
-            <h3 className="text-white font-semibold text-lg">Services</h3>
+            <h3 className="text-white font-semibold text-lg">Our Services</h3>
             <ul className="space-y-3">
               {serviceLinks.map((link) => (
                 <li key={link.name}>
