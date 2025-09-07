@@ -25,16 +25,12 @@ import { FinancingService } from './pages/services/FinancingService';
 import { ConciergeService } from './pages/services/ConciergeService';
 import { PerformanceUpgrades } from './pages/services/PerformanceUpgrades';
 import { AboutUs } from './pages/AboutUs';
+import { FAQ } from './pages/legal/faq';
+import { Terms } from './pages/legal/terms';
+import { Privacy } from './pages/legal/Privacy';
+import { Testimonials } from './pages/Testimonials';
 
 // Placeholder components for missing pages
-const Testimonials = () => (
-  <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 className="text-4xl font-bold text-white mb-4">Customer Testimonials</h1>
-      <p className="text-xl text-gray-400">This page is under construction. Coming soon!</p>
-    </div>
-  </div>
-);
 
 const Account = () => (
   <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
@@ -60,8 +56,12 @@ function App() {
                 <Route path="/ai-receptionist" element={<AIReceptionist />} />
                 <Route path="/test-drive" element={<TestDrive />} />
                 <Route path="/finance" element={<Finance />} />
-                <Route path="/about" element={<AboutUs />} /> {/* <- AboutUs connected */}
+                <Route path="/about" element={<AboutUs />} />
                 <Route path="/testimonials" element={<Testimonials />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+
+                {/* Services Routes */}
                 <Route path="/services" element={<Services />} /> 
                 <Route path="/services/maintenance" element={<Maintenance />} />
                 <Route path="/services/trade-in" element={<TradeIn />} />
@@ -69,6 +69,7 @@ function App() {
                 <Route path="/services/financing" element={<FinancingService />} />
                 <Route path="/services/concierge" element={<ConciergeService />} />
                 <Route path="/services/performance" element={<PerformanceUpgrades />} />
+                <Route path="/faq" element={<FAQ />} />
 
                 {/* Additional service routes can be added here */}
                 <Route path="/contact" element={<ContactUs />} />
