@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { BookingProvider } from './context/BookingContext';
 import { Navbar } from './components/Layout/Navbar';
 import { Footer } from './components/Layout/Footer';
+import { Chatbot } from './components/Chatbot/Chatbot';
 
 // Pages
 import { Home } from './pages/Home';
@@ -26,12 +27,11 @@ import { ConciergeService } from './pages/services/ConciergeService';
 import { PerformanceUpgrades } from './pages/services/PerformanceUpgrades';
 import { AboutUs } from './pages/AboutUs';
 import { FAQ } from './pages/legal/faq';
-import { Terms } from './pages/legal/terms';
+import { Terms } from './pages/legal/Terms';
 import { Privacy } from './pages/legal/Privacy';
 import { Testimonials } from './pages/Testimonials';
 
 // Placeholder components for missing pages
-
 const Account = () => (
   <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -46,7 +46,7 @@ function App() {
     <AuthProvider>
       <BookingProvider>
         <Router>
-          <div className="App">
+          <div className="App min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900">
             <Navbar />
             <main>
               <Routes>
@@ -80,6 +80,7 @@ function App() {
               </Routes>
             </main>
             <Footer />
+            <Chatbot />
           </div>
         </Router>
       </BookingProvider>

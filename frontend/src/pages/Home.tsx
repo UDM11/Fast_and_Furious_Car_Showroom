@@ -13,8 +13,6 @@ import {
   Calendar,
   Calculator,
   ArrowRight,
-  MessageCircle,
-  Mic,
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -24,8 +22,6 @@ import { testimonialsData } from '../data/testimonialsData';
 export const Home: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showChatbot, setShowChatbot] = useState(false);
-  const [isVoiceActive, setIsVoiceActive] = useState(false);
   const navigate = useNavigate();
 
   const heroSlides = [
@@ -56,10 +52,30 @@ export const Home: React.FC = () => {
   ];
 
   const features = [
-    { icon: Bot, title: "AI Receptionist", description: "24/7 intelligent assistance for all your car shopping needs", link: "/ai-receptionist" },
-    { icon: Calendar, title: "Easy Booking", description: "Schedule test drives with our seamless booking system", link: "/test-drive" },
-    { icon: Calculator, title: "Finance Calculator", description: "Calculate payments and explore financing options instantly", link: "/finance" },
-    { icon: Award, title: "Premium Service", description: "White-glove service and luxury amenities included", link: "/services" }
+    {
+      icon: Bot,
+      title: "AI Receptionist",
+      description: "24/7 intelligent assistance for all your car shopping needs",
+      link: "/ai-receptionist"
+    },
+    {
+      icon: Calendar,
+      title: "Easy Booking",
+      description: "Schedule test drives with our seamless booking system",
+      link: "/test-drive"
+    },
+    {
+      icon: Calculator,
+      title: "Finance Calculator",
+      description: "Calculate payments and explore financing options instantly",
+      link: "/finance"
+    },
+    {
+      icon: Award,
+      title: "Premium Service",
+      description: "White-glove service and luxury amenities included",
+      link: "/services"
+    }
   ];
 
   const stats = [
@@ -88,7 +104,6 @@ export const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900">
-
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <AnimatePresence mode="wait">
@@ -109,16 +124,16 @@ export const Home: React.FC = () => {
           </motion.div>
         </AnimatePresence>
 
+        {/* Hero Content */}
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-6"
+            className="text-5xl md:text-7xl font-bold text-white mb-6 whitespace-nowrap"
           >
             {heroSlides[currentSlide].title}
           </motion.h1>
-          
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -127,7 +142,6 @@ export const Home: React.FC = () => {
           >
             {heroSlides[currentSlide].subtitle}
           </motion.p>
-
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -136,19 +150,19 @@ export const Home: React.FC = () => {
             <Link to={heroSlides[currentSlide].link}>
               <Button size="lg" className="mr-4">
                 {heroSlides[currentSlide].cta}
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <ArrowRight className="w-5 h-5 ml-2 inline-flex items-center"/>
               </Button>
             </Link>
           </motion.div>
         </div>
 
+        {/* Arrows */}
         <button
           onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
           className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all duration-300"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
-        
         <button
           onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
           className="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all duration-300"
@@ -156,20 +170,23 @@ export const Home: React.FC = () => {
           <ChevronRight className="w-6 h-6" />
         </button>
 
+        {/* Indicators */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
           {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-cyan-400' : 'bg-white/30'}`}
+              className={`w-4 h-3 rounded-full transition-all duration-300 ${
+                index === currentSlide ? 'bg-cyan-400' : 'bg-white/30'
+              }`}
             />
           ))}
         </div>
       </section>
 
       {/* Predictive Search */}
-      <section className="py-16 bg-gradient-to-r from-gray-900 to-black">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 bg-gradient-to-r from-gray-900 to-black px-4">
+        <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -179,33 +196,33 @@ export const Home: React.FC = () => {
             <h2 className="text-3xl font-bold text-white mb-8">
               Find Your Dream Car
             </h2>
-            
-            <form onSubmit={handleSearch} className="flex max-w-2xl mx-auto">
-              <div className="relative flex-1">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by make, model, year, or type..."
-                  className="w-full px-6 py-4 pl-12 bg-white/10 backdrop-blur-sm border border-gray-600 rounded-l-full text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                />
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search by make, model, year, or type..."
+                    className="w-full px-6 py-4 pl-12 bg-white/10 backdrop-blur-sm border border-gray-600 rounded-full text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                </div>
+                <Button
+                  type="submit"
+                  className="px-6 py-4 whitespace-nowrap"
+                >
+                  Search
+                </Button>
               </div>
-              
-              <Button
-                type="submit"
-                className="px-6 py-4 rounded-r-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold"
-              >
-                Search
-              </Button>
             </form>
           </motion.div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Stats */}
+      <section className="py-16 bg-black px-4">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <motion.div
@@ -229,9 +246,9 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gradient-to-b from-black to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Features */}
+      <section className="py-20 bg-gradient-to-b from-black to-gray-900 px-4">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -245,7 +262,6 @@ export const Home: React.FC = () => {
               Experience the future of car shopping with our cutting-edge technology and premium service
             </p>
           </motion.div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <motion.div
@@ -277,8 +293,8 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Featured Cars */}
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-black px-4">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -292,13 +308,12 @@ export const Home: React.FC = () => {
               Explore our handpicked selection of premium cars
             </p>
             <Link to="/inventory">
-              <Button variant="outline">
+              <Button variant="outline" className="inline-flex items-center">
                 View All Inventory
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </motion.div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredCars.map((car, index) => (
               <motion.div
@@ -337,9 +352,9 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Testimonials Preview */}
-      <section className="py-20 bg-gradient-to-b from-black to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Testimonials */}
+      <section className="py-20 bg-gradient-to-b from-black to-gray-900 px-4">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -353,13 +368,12 @@ export const Home: React.FC = () => {
               Read reviews from satisfied customers
             </p>
             <Link to="/testimonials">
-              <Button variant="outline">
+              <Button variant="outline" className="inline-flex items-center">
                 Read All Reviews
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </motion.div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {topTestimonials.map((testimonial, index) => (
               <motion.div
@@ -374,7 +388,11 @@ export const Home: React.FC = () => {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-600'}`}
+                        className={`w-4 h-4 ${
+                          i < testimonial.rating 
+                            ? 'text-yellow-400 fill-current' 
+                            : 'text-gray-600'
+                        }`}
                       />
                     ))}
                   </div>
@@ -397,9 +415,9 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-cyan-600 to-blue-700">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* CTA */}
+      <section className="py-20 bg-gradient-to-r from-cyan-600 to-blue-700 px-4">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -418,7 +436,7 @@ export const Home: React.FC = () => {
                 </Button>
               </Link>
               <Link to="/ai-receptionist">
-                <Button size="lg" variant="outline" className="bg-white/10 border-white text-white hover:bg-white hover:text-cyan-600">
+                <Button size="lg" variant="outline" className="bg-white/10 border-white text-white hover:bg-white/10 hover:border-white">
                   Try AI Assistant
                 </Button>
               </Link>
@@ -426,49 +444,6 @@ export const Home: React.FC = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Floating Chatbot */}
-      <AnimatePresence>
-        {showChatbot && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-6 right-6 w-96 bg-gray-900 rounded-xl shadow-lg z-50 overflow-hidden"
-          >
-            <div className="flex justify-between items-center p-4 bg-gray-800">
-              <h4 className="text-white font-semibold">AI Assistant</h4>
-              <button onClick={() => setShowChatbot(false)} className="text-gray-400 hover:text-white">✕</button>
-            </div>
-            <div className="p-4 h-80 overflow-y-auto">
-              <p className="text-gray-400">Chatbot content goes here...</p>
-            </div>
-            <div className="flex items-center p-4 border-t border-gray-700">
-              <input
-                type="text"
-                placeholder="Type your message..."
-                className="flex-1 px-4 py-2 rounded-full bg-gray-800 text-white placeholder-gray-500 focus:outline-none"
-              />
-              <button className="ml-2 p-2 bg-cyan-500 rounded-full hover:bg-cyan-600">
-                <MessageCircle className="w-5 h-5 text-white" />
-              </button>
-              <button
-                onClick={() => setIsVoiceActive(!isVoiceActive)}
-                className={`ml-2 p-2 rounded-full ${isVoiceActive ? 'bg-red-500' : 'bg-gray-700'} hover:bg-red-600`}
-              >
-                <Mic className="w-5 h-5 text-white" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <button
-        onClick={() => setShowChatbot(!showChatbot)}
-        className="fixed bottom-6 right-6 z-40 p-4 bg-cyan-500 rounded-full hover:bg-cyan-600 shadow-lg"
-      >
-        <Bot className="w-6 h-6 text-white" />
-      </button>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
@@ -32,14 +32,9 @@ const ContactUs: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showLabel, setShowLabel] = useState(false);
+  const [showLabel] = useState(true);
 
   const formRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowLabel(true), 500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -246,8 +241,8 @@ const ContactUs: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Responsive Floating WhatsApp Button */}
-      <div className="fixed right-4 bottom-4 z-50 flex flex-col items-center gap-1 sm:gap-2">
+      {/* Fixed WhatsApp Button */}
+      <div className="fixed right-6 bottom-32 z-50 flex flex-col items-center gap-1 sm:gap-2">
         <AnimatePresence>
           {showLabel && (
             <motion.div
