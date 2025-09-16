@@ -198,9 +198,9 @@ export const Inventory: React.FC = () => {
                   size="sm"
                   onClick={() => setShowFilters(!showFilters)}
                 >
-                  <Filter className="w-4 h-4 mr-2" />
+                  <Filter className="w-4 h-4 mr-2 inline-flex" />
                   Advanced Filters
-                  <ChevronDown className={`w-4 h-4 ml-2 transform transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 ml-2 inline-flex transform transition-transform ${showFilters ? 'rotate-180' : ''}`} />
                 </Button>
 
                 {/* View Mode Toggle */}
