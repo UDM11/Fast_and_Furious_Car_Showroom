@@ -3,6 +3,7 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime
 from uuid import UUID, uuid4
 from enum import Enum
+from sqlalchemy import Column, JSON, Text
 
 
 class VehicleStatus(str, Enum):
@@ -38,8 +39,8 @@ class Vehicle(SQLModel, table=True):
     price: float = Field(ge=0)
     mileage: int = Field(ge=0)
     status: VehicleStatus = Field(default=VehicleStatus.AVAILABLE)
-    features: Dict[str, Any] = Field(default_factory=dict, sa_column_kwargs={"type_": "JSONB"})
-    images: List[str] = Field(default_factory=list, sa_column_kwargs={"type_": "TEXT[]"})
+    features: Optional[str] = Field(default=None, sa_column=Column(Text))
+    images: Optional[str] = Field(default=None, sa_column=Column(Text))
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
     # Relationships
@@ -90,5 +91,5 @@ class Session(SQLModel, table=True):
     __tablename__ = "sessions"
     
     session_id: str = Field(primary_key=True, max_length=255)
-    context: Dict[str, Any] = Field(default_factory=dict, sa_column_kwargs={"type_": "JSONB"})
+    context: Optional[str] = Field(default=None, sa_column=Column(Text))
     last_active: datetime = Field(default_factory=datetime.utcnow)

@@ -9,7 +9,7 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    database_url: str = os.getenv("DATABASE_URL", "postgresql+asyncpg://user:pass@localhost:5432/ai_receptionist")
+    database_url: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./ai_receptionist.db")
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
     jwt_secret: str = os.getenv("JWT_SECRET", "changeme")
     jwt_algorithm: str = os.getenv("JWT_ALGORITHM", "HS256")
@@ -36,5 +36,5 @@ async def get_session() -> AsyncSession:
 
 def create_tables():
     """Create all tables. Used for testing."""
-    sync_engine = create_engine(settings.database_url.replace("+asyncpg", ""))
+    sync_engine = create_engine(settings.database_url.replace("+aiosqlite", ""))
     SQLModel.metadata.create_all(sync_engine)
