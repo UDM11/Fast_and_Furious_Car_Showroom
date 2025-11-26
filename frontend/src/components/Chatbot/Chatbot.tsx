@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "../ui/Card";
 import { Bot, X, Send, Loader2, MessageCircle } from "lucide-react";
+import { chatAPI } from "../../services/api";
 
 interface Message {
   id: string;
@@ -33,7 +34,7 @@ export const Chatbot: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputText.trim()) return;
 
@@ -45,11 +46,12 @@ export const Chatbot: React.FC = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = inputText;
     setInputText("");
     setLoading(true);
 
-    setTimeout(() => {
-      const botResponse = generateBotResponse(userMessage.text);
+    try {
+      const botResponse = await chatAPI.sendMessage(currentInput);
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: botResponse,
@@ -57,43 +59,20 @@ export const Chatbot: React.FC = () => {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "Sorry, I'm having trouble connecting. Please try again later.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
-  const generateBotResponse = (userInput: string): string => {
-    const input = userInput.toLowerCase();
 
-    if (input.includes("inventory") || input.includes("car") || input.includes("vehicle")) {
-      return "We have a wide selection of premium vehicles. Browse by model, price, or availability?";
-    }
-
-    if (input.includes("test drive") || input.includes("drive")) {
-      return "You can schedule a test drive online. Want me to open the booking form?";
-    }
-
-    if (input.includes("price") || input.includes("cost") || input.includes("finance")) {
-      return "We offer transparent pricing and financing. Do you want EMI, lease, or purchase details?";
-    }
-
-    if (input.includes("service") || input.includes("maintenance") || input.includes("repair")) {
-      return "We provide certified service and maintenance. Should I connect you to our service center?";
-    }
-
-    if (input.includes("warranty") || input.includes("guarantee")) {
-      return "All vehicles come with warranty options up to 5 years. Want me to list them?";
-    }
-
-    if (input.includes("contact") || input.includes("phone") || input.includes("email")) {
-      return "📞 (555) 123-4567\n📧 info@fastandfurious.com\n📍 123 Speed Street, Los Angeles, CA";
-    }
-
-    if (input.includes("hours") || input.includes("open") || input.includes("time")) {
-      return "Showroom hours:\nMon-Fri: 9AM - 8PM\nSat: 10AM - 6PM\nSun: 11AM - 5PM";
-    }
-
-    return "I'm here to help with inventory, test drives, financing, or service. Ask me anything!";
-  };
 
   return (
     <>

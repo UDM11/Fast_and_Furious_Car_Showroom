@@ -12,7 +12,7 @@ import { Home } from './pages/Home';
 import { Inventory } from './pages/Inventory';
 import { InventoryDetails } from './pages/InventoryDetails';
 import { TestDrive } from './pages/TestDrive';
-import { AIReceptionist } from './pages/AIReceptionist';
+import AIReceptionist from './pages/AIReceptionist';
 import { Finance } from './pages/Finance';
 import { SignIn } from './pages/auth/SignIn';
 import { SignUp } from './pages/auth/SignUp';
@@ -30,6 +30,7 @@ import { FAQ } from './pages/legal/faq';
 import { Terms } from './pages/legal/Terms';
 import { Privacy } from './pages/legal/Privacy';
 import { Testimonials } from './pages/Testimonials';
+import { NotFound } from './pages/NotFound';
 
 // Placeholder components for missing pages
 const Account = () => (
@@ -77,6 +78,7 @@ function App() {
                 <Route path="/auth/signin" element={<SignIn />} />
                 <Route path="/auth/signup" element={<SignUp />} />
                 <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
             <Footer />

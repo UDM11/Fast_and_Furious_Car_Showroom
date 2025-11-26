@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
 import {
   Mail,
   Phone,
@@ -9,9 +9,85 @@ import {
   Twitter,
   Instagram,
   MessageCircle,
-} from "lucide-react";
-import { Input } from "../components/ui/Input";
-import { Button } from "../components/ui/Button";
+  Sparkles,
+  Clock,
+  Users,
+  Award,
+  Star,
+  CheckCircle,
+  ArrowRight,
+  ChevronRight,
+  Navigation,
+  Headphones,
+  Calendar,
+  Globe,
+  Shield,
+  Heart,
+  Zap
+} from 'lucide-react';
+import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
+
+// Floating particles component for contact
+const ContactParticles: React.FC = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-cyan-400/20 rounded-full"
+          initial={{
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+          }}
+          animate={{
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+          }}
+          transition={{
+            duration: Math.random() * 25 + 15,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Animated counter component
+const AnimatedCounter: React.FC<{ value: number; suffix?: string; duration?: number }> = ({ 
+  value, 
+  suffix = '', 
+  duration = 2000 
+}) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    if (isInView && value > 0) {
+      const increment = value / (duration / 16);
+      let current = 0;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= value) {
+          setCount(value);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(current));
+        }
+      }, 16);
+      return () => clearInterval(timer);
+    }
+  }, [isInView, value, duration]);
+  
+  return (
+    <span ref={ref}>
+      {count}{suffix}
+    </span>
+  );
+};
 
 interface FormData {
   name: string;
@@ -19,22 +95,30 @@ interface FormData {
   subject: string;
   message: string;
   carModel: string;
+  phone: string;
+  preferredContact: string;
 }
 
 const ContactUs: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-    carModel: "",
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+    carModel: '',
+    phone: '',
+    preferredContact: 'email'
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showLabel] = useState(true);
-
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
   const formRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 300], [0, -50]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -52,96 +136,277 @@ const ContactUs: React.FC = () => {
     setError(null);
 
     if (!validateEmail(formData.email)) {
-      setError("Please enter a valid email address.");
+      setError('Please enter a valid email address.');
       setLoading(false);
-      formRef.current?.scrollIntoView({ behavior: "smooth" });
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
 
     try {
       setTimeout(() => {
-        setSuccess("Your message has been sent successfully!");
+        setSuccess('Your message has been sent successfully!');
+        setIsSubmitted(true);
         setFormData({
-          name: "",
-          email: "",
-          subject: "",
-          message: "",
-          carModel: "",
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+          carModel: '',
+          phone: '',
+          preferredContact: 'email'
         });
         setLoading(false);
-        formRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 1500);
+        formRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 2000);
     } catch {
-      setError("Something went wrong. Please try again later.");
+      setError('Something went wrong. Please try again later.');
       setLoading(false);
-      formRef.current?.scrollIntoView({ behavior: "smooth" });
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const carModels = ["Select Car Model", "Luxury Sedan", "SUV", "Sports Car", "Electric Car"];
+  const carModels = [
+    'Select Car Model', 
+    'Luxury Sedan', 
+    'Premium SUV', 
+    'Sports Car', 
+    'Electric Vehicle',
+    'Hybrid Vehicle',
+    'Convertible',
+    'Coupe',
+    'Hatchback'
+  ];
+  
+  const contactMethods = [
+    { value: 'email', label: 'Email', icon: Mail },
+    { value: 'phone', label: 'Phone', icon: Phone },
+    { value: 'whatsapp', label: 'WhatsApp', icon: MessageCircle }
+  ];
 
   return (
-    <div className="min-h-screen relative text-white pt-24 pb-16 px-4 md:px-6 bg-gradient-to-br from-gray-900 via-black to-gray-900">
-      <motion.div
-        ref={formRef}
-        className="relative max-w-7xl mx-auto flex flex-col md:flex-row gap-10 md:gap-12"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        {/* Contact Info */}
-        <div className="flex-1 space-y-8 md:space-y-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-cyan-400">Contact Us</h2>
-          <p className="text-gray-300 text-base md:text-lg">
-            Questions, test drives, or more info? Fill the form or reach us directly below.
-          </p>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-20 pb-16 relative overflow-hidden">
+      <ContactParticles />
+      
+      {/* Hero Background */}
+      <div className="absolute inset-0 z-0">
+        <motion.div
+          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
+        />
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Enhanced Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+          style={{ y: y1 }}
+        >
+          <motion.div
+            className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-500/30 mb-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <span className="text-cyan-300 text-sm font-medium flex items-center">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Get In Touch
+            </span>
+          </motion.div>
+          
+          <motion.h1 
+            className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            <span className="block">
+              Contact
+            </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              Our Team
+            </span>
+          </motion.h1>
+          
+          <motion.p 
+            className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          >
+            Ready to find your dream car? Our expert team is here to help you every step of the way. Reach out today!
+          </motion.p>
+        </motion.div>
 
-          <div className="space-y-4 md:space-y-6 mt-4">
-            <div className="flex items-center gap-3 md:gap-4">
-              <Mail className="text-cyan-400 w-5 h-5 md:w-6 md:h-6" aria-label="Email" />
-              <span>support@fastfuries.com</span>
+        <motion.div
+          ref={formRef}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          {/* Enhanced Contact Info */}
+          <motion.div 
+            className="space-y-8"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            {/* Contact Methods */}
+            <div className="space-y-6">
+              {[
+                {
+                  icon: Mail,
+                  title: 'Email Us',
+                  info: 'support@fastfurious.com',
+                  subInfo: 'We respond within 2 hours',
+                  color: 'from-blue-500 to-cyan-500',
+                  href: 'mailto:support@fastfurious.com'
+                },
+                {
+                  icon: Phone,
+                  title: 'Call Us',
+                  info: '+1 (555) 123-4567',
+                  subInfo: 'Mon-Sat: 8AM-8PM, Sun: 10AM-6PM',
+                  color: 'from-green-500 to-emerald-500',
+                  href: 'tel:+15551234567'
+                },
+                {
+                  icon: MapPin,
+                  title: 'Visit Us',
+                  info: '123 Speed Avenue, Racing District',
+                  subInfo: 'Premium showroom with VIP lounge',
+                  color: 'from-purple-500 to-pink-500',
+                  href: 'https://maps.google.com'
+                }
+              ].map((contact, index) => (
+                <motion.a
+                  key={contact.title}
+                  href={contact.href}
+                  target={contact.href.startsWith('http') ? '_blank' : undefined}
+                  rel={contact.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 + index * 0.1 }}
+                  className="block group"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                >
+                  <div className="p-6 bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-xl border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
+                    <div className="flex items-start space-x-4">
+                      <motion.div 
+                        className={`p-3 bg-gradient-to-r ${contact.color} bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all duration-300`}
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                      >
+                        <contact.icon className="w-6 h-6 text-white" />
+                      </motion.div>
+                      
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors duration-300">
+                          {contact.title}
+                        </h3>
+                        <p className="text-gray-300 font-medium mb-1">
+                          {contact.info}
+                        </p>
+                        <p className="text-gray-500 text-sm">
+                          {contact.subInfo}
+                        </p>
+                      </div>
+                      
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all duration-300" />
+                    </div>
+                  </div>
+                </motion.a>
+              ))}
             </div>
-            <div className="flex items-center gap-3 md:gap-4">
-              <Phone className="text-cyan-400 w-5 h-5 md:w-6 md:h-6" aria-label="Phone" />
-              <span>+977-9800000000</span>
-            </div>
-            <div className="flex items-center gap-3 md:gap-4">
-              <MapPin className="text-cyan-400 w-5 h-5 md:w-6 md:h-6" aria-label="Location" />
-              <span>Kathmandu, Nepal (Open Today: 10 AM - 7 PM)</span>
-            </div>
-          </div>
 
-          {/* Social Media */}
-          <div className="flex gap-4 md:gap-6 mt-4 md:mt-6">
-            <a href="#" title="Facebook" className="hover:text-cyan-400 transition transform hover:scale-110">
-              <Facebook size={24} />
-            </a>
-            <a href="#" title="Twitter" className="hover:text-cyan-400 transition transform hover:scale-110">
-              <Twitter size={24} />
-            </a>
-            <a href="#" title="Instagram" className="hover:text-cyan-400 transition transform hover:scale-110">
-              <Instagram size={24} />
-            </a>
-          </div>
-
-          {/* Map */}
-          <div className="mt-6 md:mt-10 rounded-2xl overflow-hidden shadow-lg border border-gray-700">
-            <iframe
-              title="map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.0271715608636!2d85.32216601506141!3d27.71724573168342!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1909b0c12b2d%3A0xe0f02a2f07d7cabc!2sKathmandu!5e0!3m2!1sen!2snp!4v1617850684530!5m2!1sen!2snp"
-              className="w-full h-64 sm:h-72 md:h-80 border-0"
-              loading="lazy"
-            ></iframe>
-            <a
-              href="https://www.google.com/maps/dir/?api=1&destination=Kathmandu,Nepal"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 block w-full text-center bg-cyan-400 hover:bg-cyan-500 text-black font-semibold py-2 md:py-3 rounded-lg shadow-md transition-all"
+            {/* Enhanced Social Media */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+              className="pt-8 border-t border-gray-700/50"
             >
-              Get Directions
-            </a>
-          </div>
-        </div>
+              <h3 className="text-xl font-bold text-white mb-6 flex items-center">
+                <Globe className="w-5 h-5 mr-2 text-cyan-400" />
+                Follow Us
+              </h3>
+              
+              <div className="flex gap-4">
+                {[
+                  { icon: Facebook, name: 'Facebook', color: 'hover:text-blue-500', href: '#' },
+                  { icon: Twitter, name: 'Twitter', color: 'hover:text-sky-500', href: '#' },
+                  { icon: Instagram, name: 'Instagram', color: 'hover:text-pink-500', href: '#' }
+                ].map((social, index) => (
+                  <motion.a
+                    key={social.name}
+                    href={social.href}
+                    title={social.name}
+                    className={`p-3 bg-gray-800/50 rounded-full text-gray-400 ${social.color} transition-all duration-300 hover:bg-gray-700/50`}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.1 + index * 0.1 }}
+                  >
+                    <social.icon size={20} />
+                  </motion.a>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Enhanced Map */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 }}
+              className="mt-8"
+            >
+              <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-700/50 relative">
+                <iframe
+                  title="Fast & Furious Car Showroom Location"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.0271715608636!2d85.32216601506141!3d27.71724573168342!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1909b0c12b2d%3A0xe0f02a2f07d7cabc!2sKathmandu!5e0!3m2!1sen!2snp!4v1617850684530!5m2!1sen!2snp"
+                  className="w-full h-64 md:h-80 border-0"
+                  loading="lazy"
+                />
+                
+                <motion.a
+                  href="https://www.google.com/maps/dir/?api=1&destination=123+Speed+Avenue,Racing+District"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center group"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Navigation className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                  Get Directions
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                </motion.a>
+              </div>
+            </motion.div>
+          </motion.div>
 
         {/* Contact Form */}
         <div className="flex-1 bg-gray-800 p-6 sm:p-8 md:p-10 rounded-2xl shadow-lg border border-gray-700 hover:shadow-xl transition-shadow">
@@ -241,30 +506,162 @@ const ContactUs: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Fixed WhatsApp Button */}
-      <div className="fixed right-6 bottom-32 z-50 flex flex-col items-center gap-1 sm:gap-2">
+        {/* Contact Statistics */}
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mt-20 mb-16"
+        >
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              We're Here to Help
+            </h2>
+            <p className="text-xl text-gray-400">
+              Our commitment to customer service excellence
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: Clock, value: 2, suffix: 'hrs', label: 'Response Time' },
+              { icon: Users, value: 98, suffix: '%', label: 'Satisfaction Rate' },
+              { icon: Award, value: 15, suffix: '+', label: 'Years Experience' },
+              { icon: Star, value: 4.9, suffix: '/5', label: 'Customer Rating' }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="text-center group"
+              >
+                <motion.div 
+                  className="flex justify-center mb-4"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                >
+                  <div className="p-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-all duration-300">
+                    <stat.icon className="w-8 h-8 text-cyan-400" />
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="text-4xl font-bold text-white mb-2"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                </motion.div>
+                
+                <div className="text-gray-400">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* FAQ Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-16"
+        >
+          <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-12">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-white mb-4">
+                Frequently Asked Questions
+              </h2>
+              <p className="text-xl text-gray-400">
+                Quick answers to common questions
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[
+                {
+                  question: 'What are your showroom hours?',
+                  answer: 'Mon-Sat: 8AM-8PM, Sunday: 10AM-6PM. We also offer appointments outside these hours.'
+                },
+                {
+                  question: 'Do you offer financing options?',
+                  answer: 'Yes, we provide competitive financing with rates starting from 2.9% APR and flexible terms.'
+                },
+                {
+                  question: 'Can I schedule a test drive online?',
+                  answer: 'Absolutely! You can book test drives through our website or by calling us directly.'
+                },
+                {
+                  question: 'Do you accept trade-ins?',
+                  answer: 'Yes, we offer competitive trade-in values with instant quotes and market analysis.'
+                }
+              ].map((faq, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="p-6 bg-gray-800/30 rounded-xl hover:bg-gray-800/50 transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <h3 className="text-lg font-bold text-white mb-3 flex items-center">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mr-2" />
+                    {faq.question}
+                  </h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+      </div>
+      
+      {/* Enhanced WhatsApp Button */}
+      <div className="fixed right-6 bottom-32 z-50 flex flex-col items-center gap-2">
         <AnimatePresence>
           {showLabel && (
             <motion.div
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: [0, -3, 0], opacity: 1 }}
               transition={{ repeat: Infinity, duration: 2 }}
-              className="bg-green-500 text-black font-semibold px-2 sm:px-3 py-1 rounded-full flex items-center gap-1 sm:gap-2 text-xs sm:text-sm select-none whitespace-nowrap"
+              className="bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold px-3 py-1 rounded-full flex items-center gap-2 text-sm select-none whitespace-nowrap shadow-lg"
             >
-              <MessageCircle size={12} /> WhatsApp
+              <MessageCircle size={14} /> WhatsApp Chat
             </motion.div>
           )}
         </AnimatePresence>
-        <a
-          href="https://wa.me/9779800000000"
+        
+        <motion.a
+          href="https://wa.me/15551234567"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-green-500 p-3 sm:p-4 rounded-full shadow-lg hover:scale-110 transition-transform"
+          className="bg-gradient-to-r from-green-500 to-emerald-500 p-4 rounded-full shadow-lg shadow-green-500/25"
           aria-label="Chat on WhatsApp"
+          whileHover={{ scale: 1.1, y: -2 }}
+          whileTap={{ scale: 0.9 }}
         >
-          <MessageCircle size={28} color="white" />
-        </a>
+          <MessageCircle size={24} color="white" />
+        </motion.a>
       </div>
+      
+      {/* Scroll to top button */}
+      <motion.button
+        className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-lg shadow-cyan-500/25 z-50"
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ 
+          opacity: scrollY > 400 ? 1 : 0,
+          scale: scrollY > 400 ? 1 : 0
+        }}
+        whileHover={{ scale: 1.1, y: -2 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        <ChevronRight className="w-6 h-6 -rotate-90" />
+      </motion.button>
     </div>
   );
 };
