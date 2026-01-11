@@ -135,27 +135,50 @@ const AIReceptionist: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)]" />
-        {[...Array(20)].map((_, i) => (
+        <motion.div
+          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
+        />
+        {[...Array(15)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-30"
+            className="absolute w-1 h-1 bg-cyan-400/20 rounded-full"
+            initial={{
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1200),
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
+            }}
             animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-              opacity: [0.3, 0.8, 0.3],
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1200),
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
             }}
             transition={{
-              duration: Math.random() * 3 + 2,
+              duration: Math.random() * 25 + 15,
               repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              repeatType: "reverse",
             }}
           />
         ))}
@@ -169,15 +192,15 @@ const AIReceptionist: React.FC = () => {
           className="text-center mb-8"
         >
           <motion.div
-            className="inline-flex items-center gap-2 bg-blue-500/20 backdrop-blur-sm border border-blue-500/30 rounded-full px-4 py-2 mb-4"
+            className="inline-flex items-center gap-2 bg-cyan-500/20 backdrop-blur-sm border border-cyan-500/30 rounded-full px-4 py-2 mb-4"
             whileHover={{ scale: 1.05 }}
           >
-            <Sparkles className="w-4 h-4 text-blue-400" />
-            <span className="text-blue-300 text-sm font-medium">AI-Powered Assistant</span>
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <span className="text-cyan-300 text-sm font-medium">AI-Powered Assistant</span>
           </motion.div>
           
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-            AI <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Receptionist</span>
+            AI <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Receptionist</span>
           </h1>
           
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
