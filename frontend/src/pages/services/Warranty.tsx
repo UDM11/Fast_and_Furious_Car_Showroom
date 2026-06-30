@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 import { Button } from '../../components/ui/Button';
 import { Shield, Clock, CheckCircle, Car, Phone, Mail, ArrowRight } from 'lucide-react';
 
-export const Warranty: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('standard');
-
   const warrantyPlans = {
     standard: {
       name: 'Standard Warranty',
@@ -29,7 +26,7 @@ export const Warranty: React.FC = () => {
     },
     extended: {
       name: 'Extended Warranty',
-      price: '$2,500 - $5,000',
+      price: 'NPR 2,500 - NPR 5,000',
       duration: '5 years / 60,000 miles',
       coverage: [
         'All Standard coverage plus',
@@ -50,7 +47,7 @@ export const Warranty: React.FC = () => {
     },
     premium: {
       name: 'Premium Warranty',
-      price: '$4,000 - $8,000',
+      price: 'NPR 4,000 - NPR 8,000',
       duration: '7 years / 100,000 miles',
       coverage: [
         'All Extended coverage plus',
@@ -72,6 +69,9 @@ export const Warranty: React.FC = () => {
     }
   };
 
+export const Warranty: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<keyof typeof warrantyPlans>('standard');
+
   const faqs = [
     {
       question: 'What is covered under the warranty?',
@@ -82,7 +82,7 @@ export const Warranty: React.FC = () => {
       answer: 'Yes, our Premium warranty is fully transferable to subsequent owners. Standard and Extended warranties may require a transfer fee.'
     },
     {
-      question: 'Where can I get service under warranty?',
+      question: 'Where can get service under warranty?',
       answer: 'You can visit any authorized Fast & Furious service center nationwide. We have over 50 locations across the country.'
     },
     {
@@ -112,7 +112,7 @@ export const Warranty: React.FC = () => {
       <div className="mb-16">
         <div className="flex justify-center mb-8">
           <div className="bg-gray-800 rounded-lg p-1 flex">
-            {Object.keys(warrantyPlans).map((planKey) => (
+            {(Object.keys(warrantyPlans) as Array<keyof typeof warrantyPlans>).map((planKey) => (
               <button
                 key={planKey}
                 onClick={() => setActiveTab(planKey)}

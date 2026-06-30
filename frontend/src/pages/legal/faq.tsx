@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { 
   Search, 
   ChevronDown, 
   ChevronUp, 
+  ChevronRight,
   FileText, 
   Car, 
   CreditCard, 
@@ -18,7 +20,6 @@ export const FAQ: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('general');
   const [openItem, setOpenItem] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-
   const categories = [
     { id: 'general', name: 'General Questions', icon: HelpCircle },
     { id: 'vehicles', name: 'Vehicles & Inventory', icon: Car },
@@ -77,7 +78,7 @@ export const FAQ: React.FC = () => {
     setOpenItem(openItem === index ? null : index);
   };
 
-  const filteredFaqs = faqs[activeCategory].filter(faq =>
+  const filteredFaqs = faqs[activeCategory as keyof typeof faqs].filter(faq =>
     faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
     faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -275,6 +276,16 @@ export const FAQ: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <div className="max-w-4xl mx-auto mt-16">
+        <h2 className="text-3xl font-bold text-white mb-8 text-center">Still Have Questions?</h2>
+        <div className="text-center">
+          <p className="text-gray-400 mb-6">Can't find the answer you're looking for? Contact our support team.</p>
+          <button className="px-8 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-semibold transition-colors">
+            Contact Support
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};

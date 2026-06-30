@@ -167,7 +167,7 @@ export const FinancingService: React.FC = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-gray-300 mb-2">Vehicle Price ($)</label>
+                    <label className="block text-gray-300 mb-2">Vehicle Price (NPR)</label>
                     <input
                       type="number"
                       name="vehiclePrice"
@@ -179,7 +179,7 @@ export const FinancingService: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-gray-300 mb-2">Down Payment ($)</label>
+                    <label className="block text-gray-300 mb-2">Down Payment (NPR)</label>
                     <input
                       type="number"
                       name="downPayment"

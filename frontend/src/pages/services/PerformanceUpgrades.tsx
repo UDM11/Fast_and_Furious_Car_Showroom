@@ -33,7 +33,7 @@ export const PerformanceUpgrades: React.FC = () => {
   const packages = {
     stage1: {
       name: 'Stage 1 Performance',
-      price: '$2,500 - $5,000',
+      price: 'NPR 2,500 - NPR 5,000',
       description: 'Entry-level performance enhancements for daily driving',
       features: [
         'ECU Remapping',
@@ -46,7 +46,7 @@ export const PerformanceUpgrades: React.FC = () => {
     },
     stage2: {
       name: 'Stage 2 Performance',
-      price: '$5,000 - $12,000',
+      price: 'NPR 5,000 - NPR 12,000',
       description: 'Advanced upgrades for serious enthusiasts',
       features: [
         'Turbo/Supercharger Upgrade',
@@ -59,7 +59,7 @@ export const PerformanceUpgrades: React.FC = () => {
     },
     stage3: {
       name: 'Stage 3 Performance',
-      price: '$15,000 - $30,000+',
+      price: 'NPR 15,000 - NPR 30,000+',
       description: 'Ultimate performance package for maximum power',
       features: [
         'Full Engine Build',
@@ -74,35 +74,35 @@ export const PerformanceUpgrades: React.FC = () => {
 
   const upgrades: Record<string, any[]> = {
     engine: [
-      { name: 'ECU Tuning', price: '$800-1,500', power: '+20-30%', time: '2-3 hours' },
-      { name: 'Turbo Upgrade', price: '$3,000-8,000', power: '+40-70%', time: '1-2 days' },
-      { name: 'Supercharger Kit', price: '$5,000-12,000', power: '+50-80%', time: '2-3 days' },
-      { name: 'Cold Air Intake', price: '$300-800', power: '+5-10%', time: '1-2 hours' },
-      { name: 'Performance Camshafts', price: '$1,500-3,000', power: '+15-25%', time: '1 day' }
+      { name: 'ECU Tuning', price: 'NPR 800-1,500', power: '+20-30%', time: '2-3 hours' },
+      { name: 'Turbo Upgrade', price: 'NPR 3,000-8,000', power: '+40-70%', time: '1-2 days' },
+      { name: 'Supercharger Kit', price: 'NPR 5,000-12,000', power: '+50-80%', time: '2-3 days' },
+      { name: 'Cold Air Intake', price: 'NPR 300-800', power: '+5-10%', time: '1-2 hours' },
+      { name: 'Performance Camshafts', price: 'NPR 1,500-3,000', power: '+15-25%', time: '1 day' }
     ],
     suspension: [
-      { name: 'Coilover Kit', price: '$1,200-3,000', improvement: 'Handling +35%', time: '4-6 hours' },
-      { name: 'Sway Bars', price: '$400-900', improvement: 'Body Roll -40%', time: '2-3 hours' },
-      { name: 'Performance Brakes', price: '$1,500-4,000', improvement: 'Stopping -30%', time: '1 day' },
-      { name: 'Strut Tower Brace', price: '$200-500', improvement: 'Rigidity +20%', time: '1 hour' }
+      { name: 'Coilover Kit', price: 'NPR 1,200-3,000', improvement: 'Handling +35%', time: '4-6 hours' },
+      { name: 'Sway Bars', price: 'NPR 400-900', improvement: 'Body Roll -40%', time: '2-3 hours' },
+      { name: 'Performance Brakes', price: 'NPR 1,500-4,000', improvement: 'Stopping -30%', time: '1 day' },
+      { name: 'Strut Tower Brace', price: 'NPR 200-500', improvement: 'Rigidity +20%', time: '1 hour' }
     ],
     exhaust: [
-      { name: 'Cat-Back Exhaust', price: '$800-2,500', sound: 'Aggressive', power: '+5-15%' },
-      { name: 'Downpipe', price: '$400-1,200', sound: 'Deep', power: '+10-20%' },
-      { name: 'Headers', price: '$600-1,800', sound: 'Sporty', power: '+8-15%' },
-      { name: 'Muffler Delete', price: '$200-500', sound: 'Loud', power: '+3-5%' }
+      { name: 'Cat-Back Exhaust', price: 'NPR 800-2,500', sound: 'Aggressive', power: '+5-15%' },
+      { name: 'Downpipe', price: 'NPR 400-1,200', sound: 'Deep', power: '+10-20%' },
+      { name: 'Headers', price: 'NPR 600-1,800', sound: 'Sporty', power: '+8-15%' },
+      { name: 'Muffler Delete', price: 'NPR 200-500', sound: 'Loud', power: '+3-5%' }
     ],
     aerodynamics: [
-      { name: 'Front Splitter', price: '$400-1,200', downforce: '+25%', material: 'Carbon Fiber' },
-      { name: 'Rear Wing', price: '$600-2,000', downforce: '+40%', material: 'Carbon Fiber' },
-      { name: 'Side Skirts', price: '$300-900', downforce: '+15%', material: 'Fiberglass' },
-      { name: 'Diffuser', price: '$500-1,500', downforce: '+30%', material: 'Carbon Fiber' }
+      { name: 'Front Splitter', price: 'NPR 400-1,200', downforce: '+25%', material: 'Carbon Fiber' },
+      { name: 'Rear Wing', price: 'NPR 600-2,000', downforce: '+40%', material: 'Carbon Fiber' },
+      { name: 'Side Skirts', price: 'NPR 300-900', downforce: '+15%', material: 'Fiberglass' },
+      { name: 'Diffuser', price: 'NPR 500-1,500', downforce: '+30%', material: 'Carbon Fiber' }
     ],
     cosmetic: [
-      { name: 'Carbon Fiber Hood', price: '$1,200-2,500', weight: '-40%', style: 'Aggressive' },
-      { name: 'Custom Wheels', price: '$800-3,000', weight: '-20%', style: 'Premium' },
-      { name: 'Body Kit', price: '$2,000-6,000', style: 'Full Conversion', material: 'Polyurethane' },
-      { name: 'Window Tint', price: '$200-600', protection: 'UV 99%', style: 'Stealth' }
+      { name: 'Carbon Fiber Hood', price: 'NPR 1,200-2,500', weight: '-40%', style: 'Aggressive' },
+      { name: 'Custom Wheels', price: 'NPR 800-3,000', weight: '-20%', style: 'Premium' },
+      { name: 'Body Kit', price: 'NPR 2,000-6,000', style: 'Full Conversion', material: 'Polyurethane' },
+      { name: 'Window Tint', price: 'NPR 200-600', protection: 'UV 99%', style: 'Stealth' }
     ]
   };
 

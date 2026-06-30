@@ -22,6 +22,7 @@ import {
 import { carsData } from '../data/carsData';
 import { Car } from '../types';
 import { CarCard } from '../components/Inventory/CarCard';
+import { formatNpr } from '../utils/currency';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -185,7 +186,7 @@ export const Inventory: React.FC = () => {
   const activeFilters = [];
   if (searchQuery) activeFilters.push({ key: 'search', label: `Search: "${searchQuery}"`, remove: () => setSearchQuery('') });
   if (selectedType !== 'all') activeFilters.push({ key: 'type', label: `Type: ${selectedType}`, remove: () => setSelectedType('all') });
-  if (priceRange[0] > 0 || priceRange[1] < 500000) activeFilters.push({ key: 'price', label: `Price: $${priceRange[0].toLocaleString()}-$${priceRange[1].toLocaleString()}`, remove: () => setPriceRange([0, 500000]) });
+  if (priceRange[0] > 0 || priceRange[1] < 500000) activeFilters.push({ key: 'price', label: `Price: ${formatNpr(priceRange[0])} - ${formatNpr(priceRange[1])}`, remove: () => setPriceRange([0, 500000]) });
   if (yearRange[0] > 2020 || yearRange[1] < 2024) activeFilters.push({ key: 'year', label: `Year: ${yearRange[0]}-${yearRange[1]}`, remove: () => setYearRange([2020, 2024]) });
 
   return (
@@ -207,7 +208,7 @@ export const Inventory: React.FC = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.2, 0.4, 0.2],
@@ -229,19 +230,6 @@ export const Inventory: React.FC = () => {
           className="text-center mb-16"
           style={{ y: y1 }}
         >
-          <motion.div
-            className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-500/30 mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className="text-cyan-300 text-sm font-medium flex items-center">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Premium Collection
-            </span>
-          </motion.div>
-          
           <motion.h1 
             className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }}
@@ -503,7 +491,7 @@ export const Inventory: React.FC = () => {
                             Price Range
                           </label>
                           <span className="text-sm text-cyan-400 font-semibold">
-                            ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}
+                            {formatNpr(priceRange[0])} - {formatNpr(priceRange[1])}
                           </span>
                         </div>
                         
@@ -519,8 +507,8 @@ export const Inventory: React.FC = () => {
                               className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb"
                             />
                             <div className="flex justify-between text-xs text-gray-500 mt-1">
-                              <span>$0</span>
-                              <span>$500K</span>
+                              <span>NPR 0</span>
+                              <span>NPR 500K</span>
                             </div>
                           </div>
                           
@@ -597,10 +585,10 @@ export const Inventory: React.FC = () => {
                       </div>
                       <div className="flex flex-wrap gap-3">
                         {[
-                          { label: 'Luxury ($100K+)', price: [100000, 500000], year: [2020, 2024] },
-                          { label: 'Budget Friendly (<$50K)', price: [0, 50000], year: [2018, 2024] },
+                          { label: 'Luxury (NPR 100K+)', price: [100000, 500000], year: [2020, 2024] },
+                          { label: 'Budget Friendly (<NPR 50K)', price: [0, 50000], year: [2018, 2024] },
                           { label: 'Latest Models (2023+)', price: [0, 500000], year: [2023, 2024] },
-                          { label: 'Mid-Range ($50K-$100K)', price: [50000, 100000], year: [2020, 2024] }
+                          { label: 'Mid-Range (NPR 50K-NPR 100K)', price: [50000, 100000], year: [2020, 2024] }
                         ].map((preset, index) => (
                           <motion.button
                             key={preset.label}
@@ -795,7 +783,7 @@ export const Inventory: React.FC = () => {
                         <ArrowUpDown className="w-4 h-4 ml-2 group-hover:rotate-180 transition-transform duration-300" />
                       </span>
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"
+                        className="absolute inset-0 bg-gradient-to-r from-cyan-600/20 to-blue-600/20"
                         initial={{ x: '-100%' }}
                         whileHover={{ x: 0 }}
                         transition={{ duration: 0.3 }}
@@ -945,20 +933,6 @@ export const Inventory: React.FC = () => {
         )}
       </div>
       
-      {/* Scroll to top button */}
-      <motion.button
-        className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-lg shadow-cyan-500/25 z-50"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ 
-          opacity: scrollY > 400 ? 1 : 0,
-          scale: scrollY > 400 ? 1 : 0
-        }}
-        whileHover={{ scale: 1.1, y: -2 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      >
-        <ChevronDown className="w-6 h-6 rotate-180" />
-      </motion.button>
     </div>
   );
 };

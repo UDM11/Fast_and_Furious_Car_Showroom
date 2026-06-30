@@ -26,6 +26,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { carsData } from '../data/carsData';
 import { testimonialsData } from '../data/testimonialsData';
+import { formatNpr } from '../utils/currency';
 
 // Floating particles component
 const FloatingParticles: React.FC = () => {
@@ -132,7 +133,7 @@ export const Home: React.FC = () => {
       image: "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg",
       cta: "Try AI Assistant",
       link: "/ai-receptionist",
-      accent: "from-purple-400 to-pink-500"
+      accent: "from-blue-400 to-indigo-500"
     },
     {
       id: 3,
@@ -141,7 +142,7 @@ export const Home: React.FC = () => {
       image: "https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg",
       cta: "Schedule Test Drive",
       link: "/test-drive",
-      accent: "from-orange-400 to-red-500"
+      accent: "from-cyan-500 to-blue-600"
     }
   ];
 
@@ -159,7 +160,7 @@ export const Home: React.FC = () => {
       title: "Instant Booking",
       description: "Lightning-fast test drive scheduling with real-time availability",
       link: "/test-drive",
-      color: "from-yellow-500 to-orange-500",
+      color: "from-blue-500 to-indigo-500",
       delay: 0.1
     },
     {
@@ -167,7 +168,7 @@ export const Home: React.FC = () => {
       title: "Smart Finance",
       description: "AI-powered financing with personalized payment options",
       link: "/finance",
-      color: "from-green-500 to-emerald-500",
+      color: "from-indigo-500 to-blue-600",
       delay: 0.2
     },
     {
@@ -175,7 +176,7 @@ export const Home: React.FC = () => {
       title: "Premium Protection",
       description: "Comprehensive warranty and white-glove concierge service",
       link: "/services",
-      color: "from-purple-500 to-pink-500",
+      color: "from-cyan-500 to-indigo-500",
       delay: 0.3
     },
     {
@@ -183,7 +184,7 @@ export const Home: React.FC = () => {
       title: "Express Delivery",
       description: "Same-day delivery available for select premium vehicles",
       link: "/services",
-      color: "from-red-500 to-rose-500",
+      color: "from-blue-600 to-cyan-500",
       delay: 0.4
     },
     {
@@ -191,7 +192,7 @@ export const Home: React.FC = () => {
       title: "Customer Care",
       description: "Dedicated relationship managers for personalized service",
       link: "/services",
-      color: "from-pink-500 to-red-500",
+      color: "from-cyan-400 to-blue-600",
       delay: 0.5
     }
   ];
@@ -212,7 +213,7 @@ export const Home: React.FC = () => {
     {
       icon: TrendingUp,
       title: "Best Value Guarantee",
-      description: "We'll match any competitor's price plus give you $500 more"
+      description: "We'll match any competitor's price plus give you NPR 500 more"
     },
     {
       icon: Sparkles,
@@ -283,7 +284,7 @@ export const Home: React.FC = () => {
             }}
           />
           <motion.div
-            className="absolute bottom-20 right-10 w-24 h-24 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-xl"
+            className="absolute bottom-20 right-10 w-24 h-24 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-full blur-xl"
             animate={{
               scale: [1.2, 1, 1.2],
               opacity: [0.4, 0.7, 0.4],
@@ -302,42 +303,13 @@ export const Home: React.FC = () => {
           className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto"
           style={{ y: y2 }}
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-6"
-          >
-            <motion.div
-              className={`inline-block px-4 py-2 rounded-full bg-gradient-to-r ${heroSlides[currentSlide].accent} bg-opacity-20 backdrop-blur-sm border border-white/20 mb-6`}
-              whileHover={{ scale: 1.05 }}
-            >
-              <span className="text-white text-sm font-medium flex items-center">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Premium Car Experience
-              </span>
-            </motion.div>
-          </motion.div>
-          
           <motion.h1
             initial={{ opacity: 0, y: 50, rotateX: 20 }}
             animate={{ opacity: 1, y: 0, rotateX: 0 }}
             transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            <span className="block">
-              {heroSlides[currentSlide].title.split(' ').map((word, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-                  className="inline-block mr-3"
-                >
-                  {word}
-                </motion.span>
-              ))}
-            </span>
+            <span className="block">{heroSlides[currentSlide].title}</span>
           </motion.h1>
           
           <motion.p
@@ -683,7 +655,7 @@ export const Home: React.FC = () => {
       <section className="py-24 bg-gradient-to-b from-gray-900 to-black px-4 relative overflow-hidden">
         <div className="absolute inset-0">
           <motion.div
-            className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+            className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
             animate={{
               scale: [1, 1.3, 1],
               opacity: [0.2, 0.4, 0.2],
@@ -919,7 +891,7 @@ export const Home: React.FC = () => {
                         transition={{ delay: index * 0.2 + 0.5, duration: 0.4 }}
                       >
                         <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                          ${car.price.toLocaleString()}
+                          {formatNpr(car.price)}
                         </span>
                         <Link to={`/inventory/${car.id}`}>
                           <motion.div
@@ -954,7 +926,7 @@ export const Home: React.FC = () => {
       <section className="py-24 bg-gradient-to-b from-gray-900 to-black px-4 relative overflow-hidden">
         <div className="absolute inset-0">
           <motion.div
-            className="absolute top-1/3 right-1/4 w-72 h-72 bg-gradient-to-r from-pink-500/5 to-purple-500/5 rounded-full blur-3xl"
+            className="absolute top-1/3 right-1/4 w-72 h-72 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
             animate={{
               scale: [1, 1.3, 1],
               opacity: [0.2, 0.4, 0.2],
@@ -1009,7 +981,7 @@ export const Home: React.FC = () => {
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                     </span>
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-pink-600/20 to-purple-600/20"
+                      className="absolute inset-0 bg-gradient-to-r from-cyan-600/20 to-blue-600/20"
                       initial={{ x: '-100%' }}
                       whileHover={{ x: 0 }}
                       transition={{ duration: 0.3 }}
@@ -1104,10 +1076,10 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-cyan-600 via-blue-700 to-purple-800 px-4 relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-cyan-600 via-blue-700 to-indigo-800 px-4 relative overflow-hidden">
         <div className="absolute inset-0">
           <motion.div
-            className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10"
+            className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10"
             animate={{
               backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
             }}
@@ -1153,19 +1125,15 @@ export const Home: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <motion.div
-              className="inline-block px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-white/70"
             >
-              <span className="text-white text-sm font-medium flex items-center">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Start Your Journey Today
-              </span>
-            </motion.div>
+              Start Your Journey Today
+            </motion.p>
             
             <motion.h2 
               className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"

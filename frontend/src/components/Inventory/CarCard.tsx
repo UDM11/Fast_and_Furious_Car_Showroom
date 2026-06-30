@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Star, Eye, Calendar, Fuel, Gauge, Zap, Shield, Award, ArrowRight } from 'lucide-react';
 import { Car } from '../../types';
 import { useBooking } from '../../context/BookingContext';
+import { formatNpr } from '../../utils/currency';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 
@@ -224,7 +225,7 @@ export const CarCard: React.FC<CarCardProps> = ({ car, onViewDetails }) => {
                   className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"
                   whileHover={{ scale: 1.05 }}
                 >
-                  ${car.price.toLocaleString()}
+                  {formatNpr(car.price)}
                 </motion.span>
                 {!car.isNew && (
                   <motion.p 
@@ -247,7 +248,7 @@ export const CarCard: React.FC<CarCardProps> = ({ car, onViewDetails }) => {
               >
                 <p className="text-sm text-gray-400">Starting at</p>
                 <p className="text-lg font-semibold text-cyan-400">
-                  ${Math.round(car.price / 60).toLocaleString()}/mo
+                  {formatNpr(Math.round(car.price / 60))}/mo
                 </p>
               </motion.div>
             </motion.div>
@@ -303,7 +304,7 @@ export const CarCard: React.FC<CarCardProps> = ({ car, onViewDetails }) => {
                   Test Drive
                 </span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"
+                  className="absolute inset-0 bg-gradient-to-r from-cyan-600/20 to-blue-600/20"
                   initial={{ x: '-100%' }}
                   whileHover={{ x: 0 }}
                   transition={{ duration: 0.3 }}

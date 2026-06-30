@@ -6,6 +6,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   signup: (userData: Omit<User, 'id' | 'createdAt' | 'role'>) => Promise<boolean>;
+  resetPassword: (email: string) => Promise<boolean>;
   isLoading: boolean;
 }
 
@@ -78,11 +79,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem('ff_user');
   };
 
+  const resetPassword = async (email: string): Promise<boolean> => {
+    setIsLoading(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    setIsLoading(false);
+    return true;
+  };
+
   const value = {
     user,
     login,
     logout,
     signup,
+    resetPassword,
     isLoading
   };
 

@@ -17,7 +17,6 @@ import {
   Shield,
   Star,
   ArrowRight,
-  ChevronRight,
   Award,
   Heart,
   Navigation,
@@ -32,6 +31,7 @@ import {
 } from 'lucide-react';
 import { FinanceCalculation } from '../types';
 import { carsData } from '../data/carsData';
+import { formatNpr } from '../utils/currency';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
@@ -42,7 +42,7 @@ const FinanceParticles: React.FC = () => {
       {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-green-400/20 rounded-full"
+          className="absolute w-1 h-1 bg-cyan-400/20 rounded-full"
           initial={{
             x: Math.random() * window.innerWidth,
             y: Math.random() * window.innerHeight,
@@ -135,7 +135,7 @@ const InteractiveChart: React.FC<{ data: { name: string; value: number; color: s
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center">
           <div className="text-2xl font-bold text-white">
-            ${total.toLocaleString()}
+            {formatNpr(total)}
           </div>
           <div className="text-gray-400 text-sm">Total Cost</div>
         </div>
@@ -148,9 +148,6 @@ export const Finance: React.FC = () => {
   const [searchParams] = useSearchParams();
   const preSelectedCarId = searchParams.get('car');
   const preSelectedPrice = searchParams.get('price');
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 300], [0, -50]);
-  
   const [selectedCar, setSelectedCar] = useState(preSelectedCarId || '');
   const [carPrice, setCarPrice] = useState(parseInt(preSelectedPrice || '0') || 285000);
   const [downPayment, setDownPayment] = useState(Math.floor(carPrice * 0.2));
@@ -256,7 +253,7 @@ export const Finance: React.FC = () => {
       {/* Hero Background */}
       <div className="absolute inset-0 z-0">
         <motion.div
-          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-full blur-3xl"
+          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -288,21 +285,7 @@ export const Finance: React.FC = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
-          style={{ y: y1 }}
         >
-          <motion.div
-            className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm border border-green-500/30 mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className="text-green-300 text-sm font-medium flex items-center">
-              <Calculator className="w-4 h-4 mr-2" />
-              Smart Finance Calculator
-            </span>
-          </motion.div>
-          
           <motion.h1 
             className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }}
@@ -312,7 +295,7 @@ export const Finance: React.FC = () => {
             <span className="block">
               Finance Your
             </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
               Dream Car
             </span>
           </motion.h1>
@@ -333,7 +316,7 @@ export const Finance: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
           >
-            <div className="flex items-center space-x-2 text-green-400">
+            <div className="flex items-center space-x-2 text-cyan-400">
               <Shield className="w-5 h-5" />
               <span className="font-semibold">Secure & Private</span>
             </div>
@@ -483,17 +466,17 @@ export const Finance: React.FC = () => {
                 >
                   <div className="flex items-center justify-between mb-4">
                     <label className="text-xl font-semibold text-white flex items-center">
-                      <DollarSign className="w-5 h-5 mr-2 text-green-400" />
+                      <DollarSign className="w-5 h-5 mr-2 text-cyan-400" />
                       Vehicle Price
                     </label>
                     <motion.span 
-                      className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500"
+                      className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"
                       key={carPrice}
                       initial={{ scale: 1.2 }}
                       animate={{ scale: 1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      ${carPrice.toLocaleString()}
+                      {formatNpr(carPrice)}
                     </motion.span>
                   </div>
                   
@@ -513,9 +496,9 @@ export const Finance: React.FC = () => {
                       whileFocus={{ scale: 1.02 }}
                     />
                     <div className="flex justify-between text-sm text-gray-400 mt-2">
-                      <span>$50K</span>
+                      <span>NPR 50K</span>
                       <span className="text-gray-500">Budget Range</span>
-                      <span>$500K</span>
+                      <span>NPR 500K</span>
                     </div>
                   </div>
                 </motion.div>
@@ -531,10 +514,10 @@ export const Finance: React.FC = () => {
               >
                 <h2 className="text-3xl font-bold text-white mb-8 flex items-center">
                   <motion.div
-                    className="p-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-full mr-4"
+                    className="p-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full mr-4"
                     whileHover={{ scale: 1.1, rotate: 5 }}
                   >
-                    <BarChart3 className="w-8 h-8 text-green-400" />
+                    <BarChart3 className="w-8 h-8 text-cyan-400" />
                   </motion.div>
                   Loan Configuration
                 </h2>
@@ -559,7 +542,7 @@ export const Finance: React.FC = () => {
                           animate={{ scale: 1 }}
                           transition={{ duration: 0.3 }}
                         >
-                          ${downPayment.toLocaleString()}
+                          {formatNpr(downPayment)}
                         </motion.div>
                         <div className="text-sm text-gray-400">
                           {((downPayment / carPrice) * 100).toFixed(1)}% of price
@@ -583,9 +566,9 @@ export const Finance: React.FC = () => {
                         whileFocus={{ scale: 1.02 }}
                       />
                       <div className="flex justify-between text-sm text-gray-400 mt-2">
-                        <span>$0 (0%)</span>
+                          <span>NPR 0 (0%)</span>
                         <span className="text-gray-500">Recommended: 20%</span>
-                        <span>${Math.floor(carPrice * 0.5).toLocaleString()} (50%)</span>
+                          <span>{formatNpr(Math.floor(carPrice * 0.5))} (50%)</span>
                       </div>
                     </div>
                   </motion.div>
@@ -597,7 +580,7 @@ export const Finance: React.FC = () => {
                     transition={{ delay: 0.8 }}
                   >
                     <label className="text-xl font-semibold text-white mb-6 flex items-center">
-                      <Calendar className="w-5 h-5 mr-2 text-purple-400" />
+                      <Calendar className="w-5 h-5 mr-2 text-cyan-400" />
                       Loan Term
                     </label>
                     
@@ -617,7 +600,7 @@ export const Finance: React.FC = () => {
                           }}
                           className={`p-4 rounded-xl border-2 transition-all duration-300 text-center ${
                             loanTerm === option.value
-                              ? 'border-purple-500 bg-gradient-to-b from-purple-500/20 to-pink-500/20 text-purple-400 shadow-lg shadow-purple-500/25'
+                              ? 'border-blue-500 bg-gradient-to-b from-blue-500/20 to-indigo-500/20 text-blue-400 shadow-lg shadow-blue-500/25'
                               : 'border-gray-700 text-gray-300 hover:border-gray-600 hover:bg-gray-800/50'
                           }`}
                         >
@@ -632,7 +615,7 @@ export const Finance: React.FC = () => {
                               animate={{ scale: 1 }}
                               transition={{ type: "spring", duration: 0.3 }}
                             >
-                              <CheckCircle className="w-4 h-4 text-purple-400" />
+                              <CheckCircle className="w-4 h-4 text-blue-400" />
                             </motion.div>
                           )}
                         </motion.button>
@@ -647,7 +630,7 @@ export const Finance: React.FC = () => {
                     transition={{ delay: 1 }}
                   >
                     <label className="text-xl font-semibold text-white mb-6 flex items-center">
-                      <Percent className="w-5 h-5 mr-2 text-orange-400" />
+                      <Percent className="w-5 h-5 mr-2 text-cyan-400" />
                       Interest Rate (APR)
                     </label>
                     
@@ -671,7 +654,7 @@ export const Finance: React.FC = () => {
                             }}
                             className={`relative p-4 rounded-xl border-2 transition-all duration-300 text-center ${
                               isSelected
-                                ? 'border-orange-500 bg-gradient-to-b from-orange-500/20 to-red-500/20 text-orange-400 shadow-lg shadow-orange-500/25'
+                                ? 'border-cyan-500 bg-gradient-to-b from-cyan-500/20 to-blue-500/20 text-cyan-400 shadow-lg shadow-cyan-500/25'
                                 : 'border-gray-700 text-gray-300 hover:border-gray-600 hover:bg-gray-800/50'
                             }`}
                           >
@@ -682,7 +665,7 @@ export const Finance: React.FC = () => {
                                 animate={{ scale: 1 }}
                                 transition={{ type: "spring", duration: 0.3 }}
                               >
-                                <CheckCircle className="w-4 h-4 text-orange-400" />
+                                <CheckCircle className="w-4 h-4 text-cyan-400" />
                               </motion.div>
                             )}
                             
@@ -722,10 +705,10 @@ export const Finance: React.FC = () => {
                     >
                       <h2 className="text-3xl font-bold text-white mb-8 flex items-center">
                         <motion.div
-                          className="p-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full mr-4"
+                          className="p-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full mr-4"
                           whileHover={{ scale: 1.1, rotate: 5 }}
                         >
-                          <PieChart className="w-8 h-8 text-purple-400" />
+                          <PieChart className="w-8 h-8 text-cyan-400" />
                         </motion.div>
                         Payment Analysis
                       </h2>
@@ -755,7 +738,7 @@ export const Finance: React.FC = () => {
                                 animate={{ scale: 1 }}
                                 transition={{ duration: 0.3 }}
                               >
-                                <AnimatedValue value={calculation.monthlyPayment} prefix="$" />
+                                <AnimatedValue value={calculation.monthlyPayment} prefix="NPR " />
                               </motion.div>
                               <div className="text-gray-400 text-sm">Monthly Payment</div>
                             </div>
@@ -800,7 +783,7 @@ export const Finance: React.FC = () => {
                                 animate={{ scale: 1 }}
                                 transition={{ duration: 0.3 }}
                               >
-                                <AnimatedValue value={item.value} prefix="$" />
+                                <AnimatedValue value={item.value} prefix="NPR " />
                               </motion.span>
                             </motion.div>
                           ))}
@@ -829,10 +812,10 @@ export const Finance: React.FC = () => {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Card className="p-8 bg-gradient-to-br from-green-900/30 to-emerald-900/30 border-2 border-green-500/30 relative overflow-hidden">
+                  <Card className="p-8 bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-500/30 relative overflow-hidden">
                     {/* Animated background */}
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5"
+                      className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-blue-500/5"
                       animate={{
                         opacity: [0.3, 0.5, 0.3],
                       }}
@@ -851,23 +834,23 @@ export const Finance: React.FC = () => {
                         transition={{ delay: 0.2 }}
                       >
                         <motion.div
-                          className="p-2 bg-green-500/20 rounded-full mr-3"
+                          className="p-2 bg-cyan-500/20 rounded-full mr-3"
                           whileHover={{ scale: 1.1, rotate: 5 }}
                         >
-                          <CreditCard className="w-6 h-6 text-green-400" />
+                          <CreditCard className="w-6 h-6 text-cyan-400" />
                         </motion.div>
                         Monthly Payment
                       </motion.h3>
                       
                       <div className="text-center">
                         <motion.div 
-                          className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500 mb-3"
+                          className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-3"
                           key={calculation.monthlyPayment}
                           initial={{ scale: 1.2, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           transition={{ duration: 0.5, type: "spring" }}
                         >
-                          $<AnimatedValue value={Math.round(calculation.monthlyPayment)} />
+                          <AnimatedValue value={Math.round(calculation.monthlyPayment)} prefix="NPR " />
                         </motion.div>
                         
                         <motion.p 
@@ -886,12 +869,12 @@ export const Finance: React.FC = () => {
                           transition={{ delay: 0.6 }}
                         >
                           <div className="flex items-center">
-                            <TrendingDown className="w-4 h-4 mr-1 text-green-400" />
+                            <TrendingDown className="w-4 h-4 mr-1 text-cyan-400" />
                             {interestRate}% APR
                           </div>
                           <div className="flex items-center">
                             <Banknote className="w-4 h-4 mr-1 text-blue-400" />
-                            ${downPayment.toLocaleString()} down
+                            {formatNpr(downPayment)} down
                           </div>
                         </motion.div>
                       </div>
@@ -930,9 +913,9 @@ export const Finance: React.FC = () => {
                       {[
                         { label: 'Vehicle Price', value: carPrice, icon: Car, color: 'text-cyan-400' },
                         { label: 'Down Payment', value: downPayment, icon: Target, color: 'text-blue-400' },
-                        { label: 'Loan Amount', value: carPrice - downPayment, icon: Banknote, color: 'text-purple-400' },
-                        { label: 'Interest Rate', value: `${interestRate}% APR`, icon: Percent, color: 'text-orange-400', isText: true },
-                        { label: 'Loan Term', value: `${loanTerm} months`, icon: Calendar, color: 'text-pink-400', isText: true },
+                        { label: 'Loan Amount', value: carPrice - downPayment, icon: Banknote, color: 'text-cyan-400' },
+                        { label: 'Interest Rate', value: `${interestRate}% APR`, icon: Percent, color: 'text-cyan-400', isText: true },
+                        { label: 'Loan Term', value: `${loanTerm} months`, icon: Calendar, color: 'text-blue-400', isText: true },
                       ].map((item, index) => (
                         <motion.div
                           key={item.label}
@@ -960,7 +943,7 @@ export const Finance: React.FC = () => {
                             animate={{ scale: 1 }}
                             transition={{ duration: 0.3 }}
                           >
-                            {item.isText ? item.value : `$${typeof item.value === 'number' ? item.value.toLocaleString() : item.value}`}
+                            {item.isText ? item.value : formatNpr(typeof item.value === 'number' ? item.value : Number(item.value))}
                           </motion.span>
                         </motion.div>
                       ))}
@@ -972,29 +955,29 @@ export const Finance: React.FC = () => {
                         className="border-t border-gray-700/50 pt-6 mt-6"
                       >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                          <div className="text-center p-4 bg-gradient-to-r from-red-900/20 to-orange-900/20 rounded-xl border border-red-500/30">
+                          <div className="text-center p-4 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 rounded-xl border border-cyan-500/30">
                             <div className="text-sm text-gray-400 mb-1">Total Interest</div>
                             <motion.div 
-                              className="text-2xl font-bold text-red-400"
+                              className="text-2xl font-bold text-cyan-400"
                               key={calculation.totalInterest}
                               initial={{ scale: 1.2 }}
                               animate={{ scale: 1 }}
                               transition={{ duration: 0.3 }}
                             >
-                              $<AnimatedValue value={Math.round(calculation.totalInterest)} />
+                              <AnimatedValue value={Math.round(calculation.totalInterest)} prefix="NPR " />
                             </motion.div>
                           </div>
                           
-                          <div className="text-center p-4 bg-gradient-to-r from-green-900/20 to-emerald-900/20 rounded-xl border border-green-500/30">
+                          <div className="text-center p-4 bg-gradient-to-r from-blue-900/20 to-indigo-900/20 rounded-xl border border-blue-500/30">
                             <div className="text-sm text-gray-400 mb-1">Total Cost</div>
                             <motion.div 
-                              className="text-2xl font-bold text-green-400"
+                              className="text-2xl font-bold text-blue-400"
                               key={calculation.totalPayment}
                               initial={{ scale: 1.2 }}
                               animate={{ scale: 1 }}
                               transition={{ duration: 0.3 }}
                             >
-                              $<AnimatedValue value={Math.round(calculation.totalPayment)} />
+                              <AnimatedValue value={Math.round(calculation.totalPayment)} prefix="NPR " />
                             </motion.div>
                           </div>
                         </div>
@@ -1019,10 +1002,10 @@ export const Finance: React.FC = () => {
                   transition={{ delay: 0.5 }}
                 >
                   <motion.div
-                    className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full mr-3"
+                    className="p-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full mr-3"
                     whileHover={{ scale: 1.1, rotate: 5 }}
                   >
-                    <Zap className="w-6 h-6 text-purple-400" />
+                    <Zap className="w-6 h-6 text-cyan-400" />
                   </motion.div>
                   Quick Actions
                 </motion.h3>
@@ -1035,7 +1018,7 @@ export const Finance: React.FC = () => {
                       icon: Save,
                       text: 'Save Calculation',
                       variant: 'primary' as const,
-                      color: 'from-green-600 to-emerald-600',
+                      color: 'from-cyan-600 to-blue-600',
                       delay: 0.6
                     },
                     {
@@ -1053,7 +1036,7 @@ export const Finance: React.FC = () => {
                       icon: Calendar,
                       text: 'Schedule Test Drive',
                       variant: 'secondary' as const,
-                      color: 'from-purple-600/20 to-pink-600/20',
+                      color: 'from-cyan-600/20 to-indigo-600/20',
                       delay: 0.8
                     }
                   ].map((action, index) => (
@@ -1130,12 +1113,12 @@ export const Finance: React.FC = () => {
                                 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors"
                                 whileHover={{ scale: 1.05 }}
                               >
-                                ${Math.round(calc.monthlyPayment).toLocaleString()}/mo
+                                {formatNpr(Math.round(calc.monthlyPayment))}/mo
                               </motion.div>
                               <div className="flex flex-wrap gap-2 text-sm text-gray-400">
                                 <span className="flex items-center">
                                   <DollarSign className="w-3 h-3 mr-1" />
-                                  ${calc.carPrice.toLocaleString()}
+                                  {formatNpr(calc.carPrice)}
                                 </span>
                                 <span className="flex items-center">
                                   <Calendar className="w-3 h-3 mr-1" />
@@ -1203,7 +1186,7 @@ export const Finance: React.FC = () => {
               >
                 <div className="flex items-center space-x-4">
                   <motion.div
-                    className="w-8 h-8 border-4 border-green-400 border-t-transparent rounded-full"
+                    className="w-8 h-8 border-4 border-cyan-400 border-t-transparent rounded-full"
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                   />
@@ -1214,21 +1197,6 @@ export const Finance: React.FC = () => {
           )}
         </AnimatePresence>
       </div>
-      
-      {/* Scroll to top button */}
-      <motion.button
-        className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full shadow-lg shadow-green-500/25 z-50"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ 
-          opacity: scrollY > 400 ? 1 : 0,
-          scale: scrollY > 400 ? 1 : 0
-        }}
-        whileHover={{ scale: 1.1, y: -2 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      >
-        <ChevronRight className="w-6 h-6 -rotate-90" />
-      </motion.button>
 
       {/* Enhanced Custom Styles */}
       <style>{`
@@ -1237,30 +1205,30 @@ export const Finance: React.FC = () => {
           height: 24px;
           width: 24px;
           border-radius: 50%;
-          background: linear-gradient(45deg, #10b981, #059669);
+          background: linear-gradient(45deg, #06b6d4, #3b82f6);
           cursor: pointer;
           border: 3px solid #1f2937;
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+          box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
           transition: all 0.3s ease;
         }
         
         .slider-enhanced::-webkit-slider-thumb:hover {
           transform: scale(1.2);
-          box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+          box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
         }
         
         .slider-enhanced::-moz-range-thumb {
           height: 24px;
           width: 24px;
           border-radius: 50%;
-          background: linear-gradient(45deg, #10b981, #059669);
+          background: linear-gradient(45deg, #06b6d4, #3b82f6);
           cursor: pointer;
           border: 3px solid #1f2937;
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+          box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
         }
         
         .slider-enhanced::-webkit-slider-track {
-          background: linear-gradient(90deg, #374151, #10b981);
+          background: linear-gradient(90deg, #374151, #06b6d4);
           height: 12px;
           border-radius: 6px;
         }

@@ -49,7 +49,7 @@ export const Maintenance: React.FC = () => {
             </ul>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between mt-4 pt-4 border-t border-gray-700 gap-3">
-            <span className="font-semibold text-amber-500 text-lg">From $150</span>
+            <span className="font-semibold text-amber-500 text-lg">From NPR 150</span>
             <Button className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded transition-colors w-full sm:w-auto">
               Schedule Now
             </Button>
@@ -88,7 +88,7 @@ export const Maintenance: React.FC = () => {
             </ul>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between mt-4 pt-4 border-t border-gray-700 gap-3">
-            <span className="font-semibold text-amber-500 text-lg">From $120</span>
+            <span className="font-semibold text-amber-500 text-lg">From NPR 120</span>
             <Button className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded transition-colors w-full sm:w-auto">
               Learn More
             </Button>
@@ -127,7 +127,7 @@ export const Maintenance: React.FC = () => {
             </ul>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between mt-4 pt-4 border-t border-gray-700 gap-3">
-            <span className="font-semibold text-amber-500 text-lg">From $250</span>
+            <span className="font-semibold text-amber-500 text-lg">From NPR 250</span>
             <Button className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded transition-colors w-full sm:w-auto">
               Schedule Now
             </Button>
@@ -166,7 +166,7 @@ export const Maintenance: React.FC = () => {
             </ul>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between mt-4 pt-4 border-t border-gray-700 gap-3">
-            <span className="font-semibold text-amber-500 text-lg">From $80</span>
+            <span className="font-semibold text-amber-500 text-lg">From NPR 80</span>
             <Button className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded transition-colors w-full sm:w-auto">
               Learn More
             </Button>
@@ -205,7 +205,7 @@ export const Maintenance: React.FC = () => {
             </ul>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between mt-4 pt-4 border-t border-gray-700 gap-3">
-            <span className="font-semibold text-amber-500 text-lg">From $100</span>
+            <span className="font-semibold text-amber-500 text-lg">From NPR 100</span>
             <Button className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded transition-colors w-full sm:w-auto">
               Schedule Now
             </Button>
@@ -244,7 +244,7 @@ export const Maintenance: React.FC = () => {
             </ul>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between mt-4 pt-4 border-t border-gray-700 gap-3">
-            <span className="font-semibold text-amber-500 text-lg">From $130</span>
+            <span className="font-semibold text-amber-500 text-lg">From NPR 130</span>
             <Button className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded transition-colors w-full sm:w-auto">
               Learn More
             </Button>
@@ -261,7 +261,7 @@ export const Maintenance: React.FC = () => {
           <div className="p-6 bg-gray-700 rounded-lg text-center">
             <h3 className="text-xl font-semibold text-white mb-4">Basic Care</h3>
             <p className="text-gray-300 mb-4 text-sm">Essential maintenance for your vehicle</p>
-            <p className="text-2xl font-bold text-amber-500 mb-4">$299/year</p>
+            <p className="text-2xl font-bold text-amber-500 mb-4">NPR 299/year</p>
             <ul className="space-y-2 text-gray-300 mb-6 text-sm">
               <li className="flex justify-center items-center">
                 <span className="text-amber-500 mr-2">✓</span>
@@ -288,7 +288,7 @@ export const Maintenance: React.FC = () => {
           <div className="p-6 bg-gray-700 rounded-lg text-center border-2 border-amber-500">
             <h3 className="text-xl font-semibold text-white mb-4">Premium Care</h3>
             <p className="text-gray-300 mb-4 text-sm">Comprehensive maintenance package</p>
-            <p className="text-2xl font-bold text-amber-500 mb-4">$599/year</p>
+            <p className="text-2xl font-bold text-amber-500 mb-4">NPR 599/year</p>
             <ul className="space-y-2 text-gray-300 mb-6 text-sm">
               <li className="flex justify-center items-center">
                 <span className="text-amber-500 mr-2">✓</span>
@@ -319,7 +319,7 @@ export const Maintenance: React.FC = () => {
           <div className="p-6 bg-gray-700 rounded-lg text-center">
             <h3 className="text-xl font-semibold text-white mb-4">Elite Care</h3>
             <p className="text-gray-300 mb-4 text-sm">Complete premium maintenance</p>
-            <p className="text-2xl font-bold text-amber-500 mb-4">$999/year</p>
+            <p className="text-2xl font-bold text-amber-500 mb-4">NPR 999/year</p>
             <ul className="space-y-2 text-gray-300 mb-6 text-sm">
               <li className="flex justify-center items-center">
                 <span className="text-amber-500 mr-2">✓</span>

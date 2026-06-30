@@ -151,7 +151,7 @@ const AIReceptionist: React.FC = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.2, 0.4, 0.2],
@@ -262,7 +262,7 @@ const AIReceptionist: React.FC = () => {
                   <div>
                     <h3 className="text-white font-semibold">AI Receptionist</h3>
                     <p className="text-green-400 text-sm flex items-center gap-1">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse inline-block" />
                       Online & Ready to Help
                     </p>
                   </div>

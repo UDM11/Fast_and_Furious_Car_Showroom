@@ -81,7 +81,7 @@ export const AboutUs: React.FC = () => {
               transition={{ delay: index * 0.2 }}
             >
               <Card className="p-8 bg-gray-800 border border-gray-700 rounded-2xl shadow-lg hover:shadow-2xl transition text-center">
-                <item.icon className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                <item.icon className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-white mb-2">
                   {item.title}
                 </h3>
@@ -110,11 +110,11 @@ export const AboutUs: React.FC = () => {
               transition={{ delay: index * 0.2 }}
             >
               <Card className="p-6 bg-gray-800 border border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition text-center">
-                <Users className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                <Users className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-1">
                   {member.name}
                 </h3>
-                <p className="text-sm text-red-400 mb-3">{member.role}</p>
+                <p className="text-sm text-blue-400 mb-3">{member.role}</p>
                 <p className="text-gray-300">{member.description}</p>
               </Card>
             </motion.div>
@@ -130,7 +130,7 @@ export const AboutUs: React.FC = () => {
         >
           <Button
             onClick={() => navigate("/contact")}
-            className="px-8 py-4 text-lg bg-red-600 hover:bg-red-700 text-white rounded-full shadow-md"
+            className="px-8 py-4 text-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-105 transition-transform text-white rounded-full shadow-md shadow-cyan-500/25"
           >
             Contact Us
           </Button>

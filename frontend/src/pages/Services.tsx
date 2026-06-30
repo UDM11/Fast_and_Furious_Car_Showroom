@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useInView, useMotionValueEvent } from 'framer-motion';
 import {
   Wrench,
   RefreshCw,
@@ -36,7 +36,7 @@ const ServicesParticles: React.FC = () => {
       {[...Array(12)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-purple-400/20 rounded-full"
+          className="absolute w-1 h-1 bg-cyan-400/20 rounded-full"
           initial={{
             x: Math.random() * window.innerWidth,
             y: Math.random() * window.innerHeight,
@@ -105,6 +105,11 @@ export const Services: React.FC = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setShowScrollTop(latest > 400);
+  });
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-20 pb-16 relative overflow-hidden">
@@ -113,7 +118,7 @@ export const Services: React.FC = () => {
       {/* Hero Background */}
       <div className="absolute inset-0 z-0">
         <motion.div
-          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -147,19 +152,6 @@ export const Services: React.FC = () => {
           className="text-center mb-16"
           style={{ y: y1 }}
         >
-          <motion.div
-            className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30 mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className="text-purple-300 text-sm font-medium flex items-center">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Premium Services
-            </span>
-          </motion.div>
-          
           <motion.h1 
             className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }}
@@ -169,7 +161,7 @@ export const Services: React.FC = () => {
             <span className="block">
               Luxury Car
             </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
               Services
             </span>
           </motion.h1>
@@ -190,7 +182,7 @@ export const Services: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
           >
-            <div className="flex items-center space-x-2 text-purple-400">
+            <div className="flex items-center space-x-2 text-cyan-400">
               <Award className="w-5 h-5" />
               <span className="font-semibold">Premium Quality</span>
             </div>
@@ -198,7 +190,7 @@ export const Services: React.FC = () => {
               <Clock className="w-5 h-5" />
               <span className="font-semibold">24/7 Support</span>
             </div>
-            <div className="flex items-center space-x-2 text-pink-400">
+            <div className="flex items-center space-x-2 text-blue-400">
               <Heart className="w-5 h-5" />
               <span className="font-semibold">Customer First</span>
             </div>
@@ -233,12 +225,12 @@ export const Services: React.FC = () => {
                   >
                     <Card className={`p-8 h-full relative overflow-hidden transition-all duration-500 ${
                       isSelected 
-                        ? 'bg-gradient-to-b from-purple-900/30 to-pink-900/30 border-2 border-purple-500/50 shadow-2xl shadow-purple-500/10' 
+                        ? 'bg-gradient-to-b from-cyan-900/30 to-blue-900/30 border-2 border-cyan-500/50 shadow-2xl shadow-cyan-500/10' 
                         : 'bg-gradient-to-b from-gray-800/50 to-gray-900/50 border border-gray-700/50 hover:border-gray-600/50'
                     }`}>
                       {/* Animated background gradient */}
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                         initial={{ scale: 0, rotate: 45 }}
                         whileHover={{ scale: 1.5, rotate: 0 }}
                         transition={{ duration: 0.5 }}
@@ -251,13 +243,13 @@ export const Services: React.FC = () => {
                           whileHover={{ scale: 1.2, rotate: 10 }}
                           transition={{ duration: 0.3 }}
                         >
-                          <div className="p-4 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                            <IconComponent className="w-8 h-8 text-purple-400 group-hover:text-purple-300" />
+                          <div className="p-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-all duration-300">
+                            <IconComponent className="w-8 h-8 text-cyan-400 group-hover:text-cyan-300" />
                           </div>
                         </motion.div>
                         
                         {/* Service Title */}
-                        <h2 className="text-2xl font-bold text-white mb-4 text-center group-hover:text-purple-400 transition-colors duration-300">
+                        <h2 className="text-2xl font-bold text-white mb-4 text-center group-hover:text-cyan-400 transition-colors duration-300">
                           {service.title}
                         </h2>
                         
@@ -300,7 +292,7 @@ export const Services: React.FC = () => {
                             className="mb-4 sm:mb-0"
                             whileHover={{ scale: 1.05 }}
                           >
-                            <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+                            <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
                               {service.price}
                             </span>
                           </motion.div>
@@ -316,7 +308,7 @@ export const Services: React.FC = () => {
                                   <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform duration-300" />
                                 </span>
                                 <motion.div
-                                  className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600"
+                                  className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600"
                                   initial={{ x: '-100%' }}
                                   whileHover={{ x: 0 }}
                                   transition={{ duration: 0.3 }}
@@ -342,10 +334,10 @@ export const Services: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="mb-20"
         >
-          <Card className="p-12 bg-gradient-to-r from-gray-800/50 to-gray-900/50 border border-purple-500/20 relative overflow-hidden">
+          <Card className="p-12 bg-gradient-to-r from-gray-800/50 to-gray-900/50 border border-cyan-500/20 relative overflow-hidden">
             {/* Animated background */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5"
+              className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-blue-500/5"
               animate={{
                 opacity: [0.3, 0.5, 0.3],
               }}
@@ -366,7 +358,7 @@ export const Services: React.FC = () => {
               >
                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                   Why Choose Our
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500"> Services?</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"> Services?</span>
                 </h2>
                 <p className="text-xl text-gray-400 max-w-2xl mx-auto">
                   Experience the difference with our premium automotive services
@@ -385,19 +377,19 @@ export const Services: React.FC = () => {
                     icon: Shield,
                     title: 'Premium OEM Parts',
                     description: 'Genuine parts with quality certification guarantee',
-                    color: 'from-green-500 to-emerald-500'
+                    color: 'from-blue-500 to-cyan-500'
                   },
                   {
                     icon: Crown,
                     title: 'VIP Experience',
                     description: 'Personalized luxury service with premium hospitality',
-                    color: 'from-purple-500 to-pink-500'
+                    color: 'from-indigo-500 to-blue-600'
                   },
                   {
                     icon: Target,
                     title: 'Transparent Pricing',
                     description: 'No hidden fees with complete honesty guarantee',
-                    color: 'from-orange-500 to-red-500'
+                    color: 'from-cyan-500 to-indigo-500'
                   },
                   {
                     icon: Clock,
@@ -409,7 +401,7 @@ export const Services: React.FC = () => {
                     icon: TrendingUp,
                     title: 'Satisfaction Guarantee',
                     description: '100% satisfaction or your money back promise',
-                    color: 'from-pink-500 to-rose-500'
+                    color: 'from-blue-600 to-cyan-500'
                   }
                 ].map((benefit, index) => (
                   <motion.div
@@ -431,7 +423,7 @@ export const Services: React.FC = () => {
                         <benefit.icon className="w-8 h-8 text-white" />
                       </motion.div>
                       
-                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors duration-300">
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300">
                         {benefit.title}
                       </h3>
                       
@@ -482,8 +474,8 @@ export const Services: React.FC = () => {
                   className="flex justify-center mb-4"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                 >
-                  <div className="p-4 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                    <stat.icon className="w-8 h-8 text-purple-400" />
+                  <div className="p-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-all duration-300">
+                    <stat.icon className="w-8 h-8 text-cyan-400" />
                   </div>
                 </motion.div>
                 
@@ -507,10 +499,10 @@ export const Services: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <Card className="p-12 bg-gradient-to-br from-purple-900/30 to-pink-900/30 border-2 border-purple-500/30 text-center relative overflow-hidden">
+          <Card className="p-12 bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-500/30 text-center relative overflow-hidden">
             {/* Animated background */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10"
+              className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10"
               animate={{
                 backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
               }}
@@ -529,7 +521,7 @@ export const Services: React.FC = () => {
                 viewport={{ once: true }}
               >
                 Ready to Experience
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500"> Premium Service?</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"> Premium Service?</span>
               </motion.h2>
               
               <motion.p 
@@ -559,7 +551,7 @@ export const Services: React.FC = () => {
                       Call Now: (555) 123-4567
                     </span>
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-600"
+                      className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600"
                       initial={{ x: '-100%' }}
                       whileHover={{ x: 0 }}
                       transition={{ duration: 0.3 }}
@@ -617,11 +609,11 @@ export const Services: React.FC = () => {
       
       {/* Scroll to top button */}
       <motion.button
-        className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full shadow-lg shadow-purple-500/25 z-50"
+        className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-lg shadow-cyan-500/25 z-50"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ 
-          opacity: scrollY > 400 ? 1 : 0,
-          scale: scrollY > 400 ? 1 : 0
+          opacity: showScrollTop ? 1 : 0,
+          scale: showScrollTop ? 1 : 0
         }}
         whileHover={{ scale: 1.1, y: -2 }}
         whileTap={{ scale: 0.9 }}

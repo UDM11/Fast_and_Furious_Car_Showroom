@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import { 
   ArrowLeft, 
   Heart, 
@@ -30,6 +30,7 @@ import {
 import { carsData } from '../data/carsData';
 import { Car } from '../types';
 import { useBooking } from '../context/BookingContext';
+import { formatNpr } from '../utils/currency';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
@@ -40,7 +41,6 @@ export const InventoryDetails: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [is360View, setIs360View] = useState(false);
   const [showFinanceCalculator, setShowFinanceCalculator] = useState(false);
-  
   const car = carsData.find(c => c.id === id);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export const InventoryDetails: React.FC = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.2, 0.4, 0.2],
@@ -371,7 +371,7 @@ export const InventoryDetails: React.FC = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2">
-                        ${car.price.toLocaleString()}
+                        {formatNpr(car.price)}
                       </div>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="text-green-400 flex items-center gap-1">
@@ -386,7 +386,7 @@ export const InventoryDetails: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-gray-400 text-sm">Starting from</p>
-                      <p className="text-2xl font-bold text-white">${Math.round(car.price * 0.02).toLocaleString()}/mo</p>
+                      <p className="text-2xl font-bold text-white">{formatNpr(Math.round(car.price * 0.02))}/mo</p>
                       <p className="text-gray-400 text-xs">with approved credit</p>
                     </div>
                   </div>
@@ -409,7 +409,7 @@ export const InventoryDetails: React.FC = () => {
                       { icon: Gauge, label: 'Mileage', value: `${car.mileage.toLocaleString()} mi`, color: 'text-cyan-400' },
                       { icon: Fuel, label: 'Fuel Type', value: car.fuel, color: 'text-green-400' },
                       { icon: Settings, label: 'Transmission', value: car.transmission, color: 'text-blue-400' },
-                      { icon: Zap, label: 'Engine', value: car.engine, color: 'text-purple-400' }
+                      { icon: Zap, label: 'Engine', value: car.engine, color: 'text-cyan-400' }
                     ].map((spec, index) => (
                       <motion.div
                         key={index}
@@ -464,7 +464,7 @@ export const InventoryDetails: React.FC = () => {
                 {[
                   { icon: MessageCircle, label: 'Chat', color: 'text-green-400' },
                   { icon: Phone, label: 'Call', color: 'text-blue-400' },
-                  { icon: MapPin, label: 'Visit', color: 'text-purple-400' }
+                  { icon: MapPin, label: 'Visit', color: 'text-cyan-400' }
                 ].map((action, index) => (
                   <motion.button
                     key={index}
@@ -608,7 +608,7 @@ export const InventoryDetails: React.FC = () => {
                         <p className="text-gray-400 mb-4">{recommendedCar.year}</p>
                         <div className="flex items-center justify-between">
                           <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                            ${recommendedCar.price.toLocaleString()}
+                            {formatNpr(recommendedCar.price)}
                           </span>
                           <Button size="sm">
                             View Details
@@ -623,6 +623,7 @@ export const InventoryDetails: React.FC = () => {
           )}
         </div>
       </div>
+
     </div>
   );
 };

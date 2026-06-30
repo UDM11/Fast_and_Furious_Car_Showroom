@@ -55,14 +55,14 @@ export const Footer: React.FC = () => {
                 <div className="relative">
                   <Car className="w-10 h-10 text-cyan-400" />
                   <div className="absolute -top-1 -right-1">
-                    <div className="w-3 h-3 bg-gradient-to-r from-pink-500 to-red-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"></div>
                   </div>
                 </div>
                 <div>
                   <h3 className="text-lg font-bold">
                     <span className="text-white">Fast</span>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"> & </span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">Furious</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Furious</span>
                   </h3>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useInView, useMotionValueEvent } from 'framer-motion';
 import { 
   Calendar, 
   Clock, 
@@ -27,6 +27,7 @@ import {
 import { carsData } from '../data/carsData';
 import { useBooking } from '../context/BookingContext';
 import { useAuth } from '../context/AuthContext';
+import { formatNpr } from '../utils/currency';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -74,7 +75,7 @@ const StepIndicator: React.FC<{ currentStep: number; totalSteps: number }> = ({ 
                 isActive
                   ? 'border-cyan-500 bg-cyan-500/20 text-cyan-400'
                   : isCompleted
-                  ? 'border-green-500 bg-green-500/20 text-green-400'
+                  ? 'border-blue-500 bg-blue-500/20 text-blue-400'
                   : 'border-gray-600 bg-gray-800/50 text-gray-400'
               }`}
               whileHover={{ scale: 1.1 }}
@@ -99,7 +100,7 @@ const StepIndicator: React.FC<{ currentStep: number; totalSteps: number }> = ({ 
             {index < totalSteps - 1 && (
               <motion.div
                 className={`w-16 h-1 rounded-full transition-all duration-500 ${
-                  isCompleted ? 'bg-green-500' : 'bg-gray-700'
+                  isCompleted ? 'bg-blue-500' : 'bg-gray-700'
                 }`}
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: isCompleted ? 1 : 0 }}
@@ -120,6 +121,11 @@ export const TestDrive: React.FC = () => {
   const { user } = useAuth();
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setShowScrollTop(latest > 400);
+  });
   
   // Form state
   const [currentStep, setCurrentStep] = useState(1);
@@ -268,7 +274,7 @@ export const TestDrive: React.FC = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.2, 0.4, 0.2],
@@ -297,19 +303,6 @@ export const TestDrive: React.FC = () => {
                 className="text-center mb-16"
                 style={{ y: y1 }}
               >
-                <motion.div
-                  className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-500/30 mb-6"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <span className="text-cyan-300 text-sm font-medium flex items-center">
-                    <Zap className="w-4 h-4 mr-2" />
-                    Premium Test Drive Experience
-                  </span>
-                </motion.div>
-                
                 <motion.h1 
                   className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
                   initial={{ opacity: 0, y: 30 }}
@@ -323,17 +316,6 @@ export const TestDrive: React.FC = () => {
                     Test Drive
                   </span>
                 </motion.h1>
-                
-                <motion.p 
-                  className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                >
-                  Experience luxury and performance firsthand with our premium test drive service
-                </motion.p>
-                
-                {/* Benefits */}
                 <motion.div
                   className="flex flex-wrap justify-center gap-8 mt-8"
                   initial={{ opacity: 0, y: 30 }}
@@ -414,7 +396,7 @@ export const TestDrive: React.FC = () => {
                                       {selectedCarData.year}
                                     </span>
                                     <span className="px-3 py-1 bg-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">
-                                      ${selectedCarData.price.toLocaleString()}
+                                      {formatNpr(selectedCarData.price)}
                                     </span>
                                     <span className="px-3 py-1 bg-green-500/20 rounded-full text-green-400 text-sm flex items-center">
                                       <Star className="w-3 h-3 mr-1" />
@@ -494,7 +476,7 @@ export const TestDrive: React.FC = () => {
                                     <div className="flex items-center justify-between">
                                       <span className="text-gray-400">{car.year}</span>
                                       <span className="text-cyan-400 font-semibold">
-                                        ${car.price.toLocaleString()}
+                                        {formatNpr(car.price)}
                                       </span>
                                     </div>
                                   </div>
@@ -1460,7 +1442,7 @@ export const TestDrive: React.FC = () => {
                           Continue Browsing
                         </span>
                         <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"
+                          className="absolute inset-0 bg-gradient-to-r from-cyan-600/20 to-blue-600/20"
                           initial={{ x: '-100%' }}
                           whileHover={{ x: 0 }}
                           transition={{ duration: 0.3 }}
@@ -1480,8 +1462,8 @@ export const TestDrive: React.FC = () => {
         className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-lg shadow-cyan-500/25 z-50"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ 
-          opacity: scrollY > 400 ? 1 : 0,
-          scale: scrollY > 400 ? 1 : 0
+          opacity: showScrollTop ? 1 : 0,
+          scale: showScrollTop ? 1 : 0
         }}
         whileHover={{ scale: 1.1, y: -2 }}
         whileTap={{ scale: 0.9 }}

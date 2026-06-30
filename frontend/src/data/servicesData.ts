@@ -14,7 +14,7 @@ export const servicesData: Service[] = [
       'Pickup & delivery service',
       'Digital service reports'
     ],
-    price: 'Starting from $299'
+    price: 'Starting from NPR 299'
   },
   {
     id: '2',
@@ -44,7 +44,7 @@ export const servicesData: Service[] = [
       'Transferable warranties',
       'No deductible options'
     ],
-    price: 'Starting from $89/month'
+    price: 'Starting from NPR 89/month'
   },
   {
     id: '4',

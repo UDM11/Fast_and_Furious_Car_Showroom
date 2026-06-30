@@ -77,16 +77,16 @@ export const Chatbot: React.FC = () => {
   return (
     <>
       {/* Floating Button with Label */}
-      <div className="fixed right-4 bottom-4 z-50 flex flex-col items-center gap-1 sm:gap-2">
+      <div className="fixed right-4 sm:right-6 bottom-4 z-50 flex items-center gap-3 justify-end pointer-events-none">
         <AnimatePresence>
           {!isOpen && (
             <motion.div
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: [0, -3, 0], opacity: 1 }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="bg-blue-600 text-white font-semibold px-2 sm:px-3 py-1 rounded-full flex items-center gap-1 sm:gap-2 text-xs sm:text-sm select-none whitespace-nowrap"
+              initial={{ x: 10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 10, opacity: 0 }}
+              className="bg-blue-600 text-white font-semibold px-3 py-1.5 rounded-full flex items-center gap-2 text-sm select-none whitespace-nowrap pointer-events-auto"
             >
-              <Bot size={12} /> AI Assistant
+              <Bot size={14} /> AI Assistant
             </motion.div>
           )}
         </AnimatePresence>
@@ -94,7 +94,7 @@ export const Chatbot: React.FC = () => {
         {/* Circle Button */}
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
-          className="bg-blue-600 p-3 sm:p-4 rounded-full shadow-lg hover:scale-110 transition-transform"
+          className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-blue-600 rounded-full shadow-lg hover:scale-110 transition-transform pointer-events-auto"
           aria-label="AI Assistant"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}

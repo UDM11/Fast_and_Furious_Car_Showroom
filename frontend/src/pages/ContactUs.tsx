@@ -16,7 +16,6 @@ import {
   Star,
   CheckCircle,
   ArrowRight,
-  ChevronRight,
   Navigation,
   Headphones,
   Calendar,
@@ -119,7 +118,6 @@ const ContactUs: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -202,7 +200,7 @@ const ContactUs: React.FC = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"
+          className="absolute bottom-40 left-20 w-80 h-80 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.2, 0.4, 0.2],
@@ -224,19 +222,6 @@ const ContactUs: React.FC = () => {
           className="text-center mb-16"
           style={{ y: y1 }}
         >
-          <motion.div
-            className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-500/30 mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className="text-cyan-300 text-sm font-medium flex items-center">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Get In Touch
-            </span>
-          </motion.div>
-          
           <motion.h1 
             className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }}
@@ -291,7 +276,7 @@ const ContactUs: React.FC = () => {
                   title: 'Call Us',
                   info: '+1 (555) 123-4567',
                   subInfo: 'Mon-Sat: 8AM-8PM, Sun: 10AM-6PM',
-                  color: 'from-green-500 to-emerald-500',
+                  color: 'from-cyan-500 to-blue-500',
                   href: 'tel:+15551234567'
                 },
                 {
@@ -299,7 +284,7 @@ const ContactUs: React.FC = () => {
                   title: 'Visit Us',
                   info: '123 Speed Avenue, Racing District',
                   subInfo: 'Premium showroom with VIP lounge',
-                  color: 'from-purple-500 to-pink-500',
+                  color: 'from-blue-500 to-indigo-500',
                   href: 'https://maps.google.com'
                 }
               ].map((contact, index) => (
@@ -621,14 +606,14 @@ const ContactUs: React.FC = () => {
       </div>
       
       {/* Enhanced WhatsApp Button */}
-      <div className="fixed right-6 bottom-32 z-50 flex flex-col items-center gap-2">
+      <div className="fixed right-4 sm:right-6 bottom-20 z-50 flex items-center gap-3 justify-end pointer-events-none">
         <AnimatePresence>
           {showLabel && (
             <motion.div
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: [0, -3, 0], opacity: 1 }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold px-3 py-1 rounded-full flex items-center gap-2 text-sm select-none whitespace-nowrap shadow-lg"
+              initial={{ x: 10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 10, opacity: 0 }}
+              className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold px-3 py-1.5 rounded-full flex items-center gap-2 text-sm select-none whitespace-nowrap shadow-lg pointer-events-auto"
             >
               <MessageCircle size={14} /> WhatsApp Chat
             </motion.div>
@@ -639,7 +624,7 @@ const ContactUs: React.FC = () => {
           href="https://wa.me/15551234567"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-gradient-to-r from-green-500 to-emerald-500 p-4 rounded-full shadow-lg shadow-green-500/25"
+          className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full shadow-lg shadow-cyan-500/25 pointer-events-auto"
           aria-label="Chat on WhatsApp"
           whileHover={{ scale: 1.1, y: -2 }}
           whileTap={{ scale: 0.9 }}
@@ -648,20 +633,6 @@ const ContactUs: React.FC = () => {
         </motion.a>
       </div>
       
-      {/* Scroll to top button */}
-      <motion.button
-        className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-lg shadow-cyan-500/25 z-50"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ 
-          opacity: scrollY > 400 ? 1 : 0,
-          scale: scrollY > 400 ? 1 : 0
-        }}
-        whileHover={{ scale: 1.1, y: -2 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      >
-        <ChevronRight className="w-6 h-6 -rotate-90" />
-      </motion.button>
     </div>
   );
 };

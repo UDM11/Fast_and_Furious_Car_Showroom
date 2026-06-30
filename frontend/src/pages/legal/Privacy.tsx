@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { 
   Shield, 
   User, 
@@ -39,6 +40,13 @@ export const Privacy: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setShowScrollTop(latest > 400);
+  });
 
   const handleConsentUpdate = (consentType: string, granted: boolean) => {
     // Handle consent preferences
@@ -403,12 +411,19 @@ export const Privacy: React.FC = () => {
       )}
 
       {/* Scroll to Top Button */}
-      <button
+      <motion.button
         onClick={scrollToTop}
-        className="fixed bottom-8 right-8 w-12 h-12 bg-cyan-600 hover:bg-cyan-500 rounded-full flex items-center justify-center shadow-lg transition-all z-40"
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ 
+          opacity: showScrollTop ? 1 : 0,
+          scale: showScrollTop ? 1 : 0
+        }}
+        whileHover={{ scale: 1.1, y: -2 }}
+        whileTap={{ scale: 0.9 }}
+        className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-lg shadow-cyan-500/25 z-50 pointer-events-auto"
       >
-        <ArrowUp className="w-6 h-6 text-white" />
-      </button>
+        <ChevronRight className="w-6 h-6 -rotate-90" />
+      </motion.button>
     </div>
   );
 };
