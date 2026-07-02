@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { BookingProvider } from './context/BookingContext';
+import { InventoryProvider } from './context/InventoryContext';
 import { Navbar } from './components/Layout/Navbar';
 import { Footer } from './components/Layout/Footer';
 import { Chatbot } from './components/Chatbot/Chatbot';
@@ -17,6 +18,8 @@ import { Finance } from './pages/Finance';
 import { SignIn } from './pages/auth/SignIn';
 import { SignUp } from './pages/auth/SignUp';
 import ForgotPassword from './pages/auth/ForgotPassword';
+import { ResetPassword } from './pages/auth/ResetPassword';
+import { Dashboard } from './pages/dashboard/Dashboard';
 import ContactUs from './pages/ContactUs';
 import { Services } from './pages/Services';
 import { Maintenance } from './pages/services/Maintenance';
@@ -32,22 +35,15 @@ import { Privacy } from './pages/legal/Privacy';
 import { Testimonials } from './pages/Testimonials';
 import { NotFound } from './pages/NotFound';
 
-// Placeholder components for missing pages
-const Account = () => (
-  <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-24 pb-16">
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 className="text-4xl font-bold text-white mb-4">Your Account</h1>
-      <p className="text-xl text-gray-400">This page is under construction. Coming soon!</p>
-    </div>
-  </div>
-);
+
 
 function App() {
   return (
     <AuthProvider>
-      <BookingProvider>
-        <Router>
-          <div className="App min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900">
+      <InventoryProvider>
+        <BookingProvider>
+          <Router>
+            <div className="App min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900">
             <Navbar />
             <main>
               <Routes>
@@ -74,18 +70,20 @@ function App() {
 
                 {/* Additional service routes can be added here */}
                 <Route path="/contact" element={<ContactUs />} />
-                <Route path="/account" element={<Account />} />
+                <Route path="/account" element={<Dashboard />} />
                 <Route path="/auth/signin" element={<SignIn />} />
                 <Route path="/auth/signup" element={<SignUp />} />
                 <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+                <Route path="/auth/reset-password" element={<ResetPassword />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
             <Footer />
             <Chatbot />
-          </div>
-        </Router>
-      </BookingProvider>
+            </div>
+          </Router>
+        </BookingProvider>
+      </InventoryProvider>
     </AuthProvider>
   );
 }

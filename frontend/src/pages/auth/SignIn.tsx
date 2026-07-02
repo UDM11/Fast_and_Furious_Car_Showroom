@@ -2,14 +2,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, Car, Facebook } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Car } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 
 export const SignIn: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -187,27 +187,18 @@ export const SignIn: React.FC = () => {
             </div>
 
             {/* Social Logins */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <Button
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2 hover:bg-gray-800/50 hover:text-white transition-all text-sm border-gray-800"
-                onClick={() => alert("Google login coming soon")}
+                onClick={loginWithGoogle}
               >
                 <img
                   src="https://www.svgrepo.com/show/475656/google-color.svg"
                   alt="Google"
                   className="w-4 h-4"
                 />
-                Google
-              </Button>
-
-              <Button
-                variant="outline"
-                className="w-full flex items-center justify-center gap-2 hover:bg-gray-800/50 hover:text-white transition-all text-sm border-gray-800"
-                onClick={() => alert("Facebook login coming soon")}
-              >
-                <Facebook className="w-4 h-4 text-blue-500" />
-                Facebook
+                Continue with Google
               </Button>
             </div>
 

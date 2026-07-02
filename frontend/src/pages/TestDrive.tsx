@@ -24,7 +24,7 @@ import {
   Users,
   TrendingUp
 } from 'lucide-react';
-import { carsData } from '../data/carsData';
+import { useInventory } from '../context/InventoryContext';
 import { useBooking } from '../context/BookingContext';
 import { useAuth } from '../context/AuthContext';
 import { formatNpr } from '../utils/currency';
@@ -120,6 +120,7 @@ export const TestDrive: React.FC = () => {
   const { addBooking } = useBooking();
   const { user } = useAuth();
   const { scrollY } = useScroll();
+  const { cars } = useInventory();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -169,7 +170,7 @@ export const TestDrive: React.FC = () => {
   };
 
   const availableDates = generateAvailableDates();
-  const selectedCarData = carsData.find(car => car.id === selectedCar);
+  const selectedCarData = cars.find(car => car.id === selectedCar);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -434,7 +435,7 @@ export const TestDrive: React.FC = () => {
                             </motion.div>
                           ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                              {carsData.slice(0, 6).map((car, index) => (
+                              {cars.slice(0, 6).map((car, index) => (
                                 <motion.div
                                   key={car.id}
                                   initial={{ opacity: 0, y: 30 }}

@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { carsData } from '../data/carsData';
+import { useInventory } from '../context/InventoryContext';
 import { testimonialsData } from '../data/testimonialsData';
 import { formatNpr } from '../utils/currency';
 
@@ -236,7 +236,8 @@ export const Home: React.FC = () => {
     }
   };
 
-  const featuredCars = carsData.slice(0, 3);
+  const { cars } = useInventory();
+  const featuredCars = cars.slice(0, 3);
   const topTestimonials = testimonialsData.slice(0, 3);
 
   return (

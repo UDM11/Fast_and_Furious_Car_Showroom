@@ -30,7 +30,7 @@ import {
   TrendingDown
 } from 'lucide-react';
 import { FinanceCalculation } from '../types';
-import { carsData } from '../data/carsData';
+import { useInventory } from '../context/InventoryContext';
 import { formatNpr } from '../utils/currency';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -148,6 +148,7 @@ export const Finance: React.FC = () => {
   const [searchParams] = useSearchParams();
   const preSelectedCarId = searchParams.get('car');
   const preSelectedPrice = searchParams.get('price');
+  const { cars } = useInventory();
   const [selectedCar, setSelectedCar] = useState(preSelectedCarId || '');
   const [carPrice, setCarPrice] = useState(parseInt(preSelectedPrice || '0') || 285000);
   const [downPayment, setDownPayment] = useState(Math.floor(carPrice * 0.2));
@@ -157,7 +158,7 @@ export const Finance: React.FC = () => {
   const [savedCalculations, setSavedCalculations] = useState<FinanceCalculation[]>([]);
   const [isCalculating, setIsCalculating] = useState(false);
 
-  const selectedCarData = carsData.find(car => car.id === selectedCar);
+  const selectedCarData = cars.find(car => car.id === selectedCar);
 
   // Calculate finance details
   useEffect(() => {
@@ -422,7 +423,7 @@ export const Finance: React.FC = () => {
                   </motion.div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    {carsData.slice(0, 4).map((car, index) => (
+                    {cars.slice(0, 4).map((car, index) => (
                       <motion.div
                         key={car.id}
                         initial={{ opacity: 0, y: 30 }}
