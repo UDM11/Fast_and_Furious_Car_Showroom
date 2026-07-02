@@ -1,5 +1,5 @@
 // src/pages/dashboard/AdminDashboard.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useBooking } from '../../context/BookingContext';
 import { useInventory } from '../../context/InventoryContext';
@@ -28,6 +28,7 @@ import {
   FileText
 } from 'lucide-react';
 import { formatNpr } from '../../utils/currency';
+import { fetchAllUsers, updateUserRoleInDb } from '../../services/supabaseService';
 
 interface AddCarModalState {
   isOpen: boolean;
@@ -72,29 +73,28 @@ export const AdminDashboard: React.FC = () => {
     features: 'Premium Audio, Leather Seats, Navigation, Driver Assist'
   });
 
-  // Mock users list (including active logged-in user)
-  const [systemUsers, setSystemUsers] = useState<Array<{ id: string; name: string; email: string; phone: string; role: 'user' | 'admin' }>>([
-    { id: user?.id || '1', name: user?.name || 'Admin User', email: user?.email || 'admin@fastandfurious.com', phone: user?.phone || '+1 (555) 123-4567', role: 'admin' },
-    { id: 'usr-2', name: 'Alexander Wright', email: 'alex.wright@luxury.com', phone: '+1 (555) 888-2911', role: 'user' },
-    { id: 'usr-3', name: 'Sophia Loren', email: 'sophia@vintage.it', phone: '+39 333 445 1192', role: 'user' },
-    { id: 'usr-4', name: 'Marcus Vance', email: 'marcus.vance@elite.co.uk', phone: '+44 7700 900077', role: 'admin' },
-    { id: 'usr-5', name: 'Diana Prince', email: 'diana@amazon.org', phone: '+1 (555) 999-1111', role: 'user' }
-  ]);
+  const [systemUsers, setSystemUsers] = useState<Array<{ id: string; name: string; email: string; phone: string; role: 'user' | 'admin' }>>([]);
 
-  const handleToggleUserRole = (userId: string, currentRole: 'user' | 'admin') => {
+  useEffect(() => {
+    fetchAllUsers()
+      .then(data => setSystemUsers(data.map((u: any) => ({
+        id: u.id,
+        name: u.name || u.email?.split('@')[0] || 'User',
+        email: u.email || '',
+        phone: u.phone || '',
+        role: u.role || 'user',
+      }))))
+      .catch(err => console.error('[AdminDashboard] fetchAllUsers error:', err));
+  }, []);
+
+  const handleToggleUserRole = async (userId: string, currentRole: 'user' | 'admin') => {
     const targetRole = currentRole === 'user' ? 'admin' : 'user';
-    
-    // If it's the active logged-in user, use AuthContext to sync in Supabase metadata
     if (userId === user?.id) {
-      if (window.confirm("Are you sure you want to demote yourself? You will lose admin dashboard access until you promote yourself back.")) {
-        updateUserRole(targetRole);
-      }
-    } else {
-      // Mock other users update
-      setSystemUsers(prev => 
-        prev.map(u => u.id === userId ? { ...u, role: targetRole } : u)
-      );
+      if (!window.confirm('Demote yourself? You will lose admin access until promoted back.')) return;
+      await updateUserRole(targetRole);
     }
+    await updateUserRoleInDb(userId, targetRole);
+    setSystemUsers(prev => prev.map(u => u.id === userId ? { ...u, role: targetRole } : u));
   };
 
   const handleOpenAddModal = () => {

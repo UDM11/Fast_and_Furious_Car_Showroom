@@ -1,91 +1,102 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { TestDriveBooking, Car } from '../types';
+import { TestDriveBooking } from '../types';
+import { useAuth } from './AuthContext';
+import {
+  fetchAllBookings,
+  fetchUserBookings,
+  insertBooking,
+  updateBookingStatus,
+  fetchFavorites,
+  addFavorite,
+  removeFavorite,
+} from '../services/supabaseService';
 
 interface BookingContextType {
   bookings: TestDriveBooking[];
   favorites: string[];
-  addBooking: (booking: Omit<TestDriveBooking, 'id' | 'createdAt'>) => void;
-  updateBooking: (id: string, status: TestDriveBooking['status']) => void;
-  toggleFavorite: (carId: string) => void;
+  addBooking: (booking: Omit<TestDriveBooking, 'id' | 'createdAt'>) => Promise<void>;
+  updateBooking: (id: string, status: TestDriveBooking['status']) => Promise<void>;
+  toggleFavorite: (carId: string) => Promise<void>;
   isFavorite: (carId: string) => boolean;
+  refreshBookings: () => Promise<void>;
 }
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
 export const useBooking = () => {
   const context = useContext(BookingContext);
-  if (context === undefined) {
-    throw new Error('useBooking must be used within a BookingProvider');
-  }
+  if (context === undefined) throw new Error('useBooking must be used within a BookingProvider');
   return context;
 };
 
 export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user } = useAuth();
   const [bookings, setBookings] = useState<TestDriveBooking[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
 
-  useEffect(() => {
-    // Load data from localStorage
-    const storedBookings = localStorage.getItem('ff_bookings');
-    const storedFavorites = localStorage.getItem('ff_favorites');
-    
-    if (storedBookings) {
-      setBookings(JSON.parse(storedBookings));
+  const loadBookings = async () => {
+    try {
+      // Admin sees all bookings; regular user sees only their own
+      const data = user?.role === 'admin'
+        ? await fetchAllBookings()
+        : user
+        ? await fetchUserBookings(user.id)
+        : [];
+      setBookings(data);
+    } catch (err) {
+      console.error('[BookingContext] loadBookings error:', err);
     }
-    
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
+  };
+
+  const loadFavorites = async () => {
+    if (!user) { setFavorites([]); return; }
+    try {
+      const data = await fetchFavorites(user.id);
+      setFavorites(data);
+    } catch (err) {
+      console.error('[BookingContext] loadFavorites error:', err);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    // Save bookings to localStorage
-    localStorage.setItem('ff_bookings', JSON.stringify(bookings));
-  }, [bookings]);
+    loadBookings();
+    loadFavorites();
+  }, [user?.id, user?.role]);
 
-  useEffect(() => {
-    // Save favorites to localStorage
-    localStorage.setItem('ff_favorites', JSON.stringify(favorites));
-  }, [favorites]);
-
-  const addBooking = (booking: Omit<TestDriveBooking, 'id' | 'createdAt'>) => {
-    const newBooking: TestDriveBooking = {
-      ...booking,
-      id: Math.random().toString(36).substr(2, 9),
-      createdAt: new Date().toISOString()
-    };
-    
-    setBookings(prev => [...prev, newBooking]);
+  const addBooking = async (booking: Omit<TestDriveBooking, 'id' | 'createdAt'>) => {
+    try {
+      const newBooking = await insertBooking(booking);
+      setBookings(prev => [newBooking, ...prev]);
+    } catch (err) {
+      console.error('[BookingContext] addBooking failed:', err);
+      throw err;
+    }
   };
 
-  const updateBooking = (id: string, status: TestDriveBooking['status']) => {
-    setBookings(prev => 
-      prev.map(booking => 
-        booking.id === id ? { ...booking, status } : booking
-      )
-    );
+  const updateBooking = async (id: string, status: TestDriveBooking['status']) => {
+    await updateBookingStatus(id, status);
+    setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
   };
 
-  const toggleFavorite = (carId: string) => {
-    setFavorites(prev => 
-      prev.includes(carId)
-        ? prev.filter(id => id !== carId)
-        : [...prev, carId]
-    );
+  const toggleFavorite = async (carId: string) => {
+    if (!user) return;
+    if (favorites.includes(carId)) {
+      await removeFavorite(user.id, carId);
+      setFavorites(prev => prev.filter(id => id !== carId));
+    } else {
+      await addFavorite(user.id, carId);
+      setFavorites(prev => [...prev, carId]);
+    }
   };
 
-  const isFavorite = (carId: string): boolean => {
-    return favorites.includes(carId);
-  };
+  const isFavorite = (carId: string) => favorites.includes(carId);
 
-  const value = {
-    bookings,
-    favorites,
-    addBooking,
-    updateBooking,
-    toggleFavorite,
-    isFavorite
-  };
-
-  return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;
+  return (
+    <BookingContext.Provider value={{
+      bookings, favorites, addBooking, updateBooking,
+      toggleFavorite, isFavorite, refreshBookings: loadBookings,
+    }}>
+      {children}
+    </BookingContext.Provider>
+  );
 };

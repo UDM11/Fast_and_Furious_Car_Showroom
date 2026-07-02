@@ -48,8 +48,8 @@ export const SignIn: React.FC = () => {
       } else {
         setErrors({ general: 'Invalid email or password' });
       }
-    } catch (error) {
-      setErrors({ general: 'An error occurred. Please try again.' });
+    } catch (error: any) {
+      setErrors({ general: error?.message || 'An error occurred. Please try again.' });
     } finally {
       setIsLoading(false);
     }

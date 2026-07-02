@@ -51,6 +51,7 @@ const AIReceptionist: React.FC = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const quickActions: QuickAction[] = [
     { id: '1', text: 'Show me available cars', icon: <MessageCircle size={16} />, category: 'inventory' },
@@ -62,7 +63,9 @@ const AIReceptionist: React.FC = () => {
   ];
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
@@ -295,7 +298,7 @@ const AIReceptionist: React.FC = () => {
             </div>
 
             {/* Messages Area */}
-            <div className="h-96 overflow-y-auto p-4 space-y-4">
+            <div ref={messagesContainerRef} className="h-96 overflow-y-auto p-4 space-y-4">
               <AnimatePresence>
                 {messages.map((message) => (
                   <motion.div
