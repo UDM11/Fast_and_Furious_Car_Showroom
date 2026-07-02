@@ -27,7 +27,7 @@ import {
   MapPin,
   Sparkles
 } from 'lucide-react';
-import { carsData } from '../data/carsData';
+import { useInventory } from '../context/InventoryContext';
 import { Car } from '../types';
 import { useBooking } from '../context/BookingContext';
 import { formatNpr } from '../utils/currency';
@@ -41,7 +41,8 @@ export const InventoryDetails: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [is360View, setIs360View] = useState(false);
   const [showFinanceCalculator, setShowFinanceCalculator] = useState(false);
-  const car = carsData.find(c => c.id === id);
+  const { cars } = useInventory();
+  const car = cars.find(c => c.id === id);
 
   useEffect(() => {
     if (!car) {
@@ -52,7 +53,7 @@ export const InventoryDetails: React.FC = () => {
   if (!car) return null;
 
   const favorite = isFavorite(car.id);
-  const recommendedCars = carsData
+  const recommendedCars = cars
     .filter(c => c.id !== car.id && (c.type === car.type || c.make === car.make))
     .slice(0, 3);
 

@@ -9,7 +9,7 @@ import { Input } from '../../components/ui/Input';
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
-  const { signup } = useAuth();
+  const { signup, loginWithGoogle } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -66,7 +66,7 @@ export const SignUp: React.FC = () => {
         name: formData.name,
         email: formData.email,
         phone: formData.phone
-      });
+      }, formData.password);
       if (success) {
         navigate('/');
       } else {
@@ -266,6 +266,29 @@ export const SignUp: React.FC = () => {
                 Create Account
               </Button>
             </form>
+
+            {/* Divider */}
+            <div className="flex items-center my-5">
+              <div className="flex-grow border-t border-gray-800"></div>
+              <span className="mx-3 text-gray-500 text-xs uppercase tracking-wider font-semibold">or</span>
+              <div className="flex-grow border-t border-gray-800"></div>
+            </div>
+
+            {/* Social Signups */}
+            <div className="grid grid-cols-1 gap-4">
+              <Button
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2 hover:bg-gray-800/50 hover:text-white transition-all text-sm border-gray-800"
+                onClick={loginWithGoogle}
+              >
+                <img
+                  src="https://www.svgrepo.com/show/475656/google-color.svg"
+                  alt="Google"
+                  className="w-4 h-4"
+                />
+                Continue with Google
+              </Button>
+            </div>
 
             {/* Mobile-only Member Benefits Summary */}
             <div className="mt-6 pt-5 border-t border-gray-800/50 lg:hidden">

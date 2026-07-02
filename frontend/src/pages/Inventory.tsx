@@ -19,7 +19,7 @@ import {
   Clock,
   Shield
 } from 'lucide-react';
-import { carsData } from '../data/carsData';
+import { useInventory } from '../context/InventoryContext';
 import { Car } from '../types';
 import { CarCard } from '../components/Inventory/CarCard';
 import { formatNpr } from '../utils/currency';
@@ -78,6 +78,7 @@ export const Inventory: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { scrollY } = useScroll();
+  const { cars } = useInventory();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
   
   // Filter states
@@ -102,7 +103,7 @@ export const Inventory: React.FC = () => {
 
   // Filter and sort cars
   const filteredCars = useMemo(() => {
-    let filtered = carsData.filter(car => {
+    let filtered = cars.filter(car => {
       // Search filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -262,7 +263,7 @@ export const Inventory: React.FC = () => {
           >
             <div className="flex items-center space-x-2 text-cyan-400">
               <CarIcon className="w-5 h-5" />
-              <span className="font-semibold">{carsData.length}+ Vehicles</span>
+              <span className="font-semibold">{cars.length}+ Vehicles</span>
             </div>
             <div className="flex items-center space-x-2 text-green-400">
               <Shield className="w-5 h-5" />
