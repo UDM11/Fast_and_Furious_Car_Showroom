@@ -142,6 +142,7 @@ export const TestDrive: React.FC = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Available time slots
@@ -204,21 +205,25 @@ export const TestDrive: React.FC = () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Add booking
-    addBooking({
-      carId: selectedCar,
-      userId: user?.id || 'guest',
-      date: selectedDate,
-      time: selectedTime,
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      status: 'pending'
-    });
+    setSubmitError(null);
+
+    try {
+      await addBooking({
+        carId: selectedCar,
+        userId: user?.id || 'guest',
+        date: selectedDate,
+        time: selectedTime,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        status: 'pending'
+      });
+    } catch (err: any) {
+      console.error('[TestDrive] booking failed:', err);
+      setSubmitError(err?.message || 'Failed to save booking. Please try again.');
+      setIsSubmitting(false);
+      return;
+    }
 
     setIsSubmitting(false);
     setShowConfirmation(true);
@@ -1103,6 +1108,18 @@ export const TestDrive: React.FC = () => {
                             </div>
                           </motion.div>
                           
+                          {/* Submit Error */}
+                          {submitError && (
+                            <motion.div
+                              className="flex items-center space-x-3 p-4 bg-red-500/10 border border-red-500/30 rounded-xl mb-6"
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                            >
+                              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                              <p className="text-red-400 text-sm">{submitError}</p>
+                            </motion.div>
+                          )}
+
                           {/* Step 4 Navigation */}
                           <motion.div 
                             className="flex justify-between"

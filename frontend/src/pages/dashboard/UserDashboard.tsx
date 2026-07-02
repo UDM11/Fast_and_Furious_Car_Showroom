@@ -13,11 +13,9 @@ import {
   Heart, 
   Settings, 
   LogOut, 
-  Car, 
   Clock, 
   CheckCircle2, 
   XCircle,
-  Phone,
   Mail,
   Shield,
   Trash2
@@ -27,7 +25,7 @@ import { formatNpr } from '../../utils/currency';
 import { supabase } from '../../utils/supabaseClient';
 
 export const UserDashboard: React.FC = () => {
-  const { user, logout, updateUserRole } = useAuth();
+  const { user, logout } = useAuth();
   const { bookings, updateBooking, favorites, toggleFavorite } = useBooking();
   const { cars } = useInventory();
   
@@ -40,8 +38,8 @@ export const UserDashboard: React.FC = () => {
   const [profileError, setProfileError] = useState<string | null>(null);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
 
-  // Filter bookings belonging to this logged in user
-  const userBookings = bookings.filter(b => b.email.toLowerCase() === user?.email.toLowerCase());
+  // bookings are already filtered per-user by BookingContext
+  const userBookings = bookings;
   
   // Filter favorite cars
   const favoriteCars = cars.filter(car => favorites.includes(car.id));
@@ -107,14 +105,6 @@ export const UserDashboard: React.FC = () => {
             <p className="text-gray-400 text-sm mt-1">Manage your luxury vehicles, bookings, and profile settings.</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button 
-              variant="outline" 
-              onClick={() => updateUserRole('admin')}
-              className="border-cyan-500/30 hover:border-cyan-400 text-cyan-400 bg-cyan-950/15 hover:bg-cyan-950/30 flex items-center gap-2"
-            >
-              <Shield className="w-4 h-4 animate-pulse" />
-              Switch to Admin Mode
-            </Button>
             <Button variant="outline" onClick={logout} className="border-gray-850 hover:bg-red-500/10 hover:text-red-400 transition-colors flex items-center gap-2">
               <LogOut className="w-4 h-4" />
               Sign Out
