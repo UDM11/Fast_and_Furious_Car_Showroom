@@ -1,5 +1,5 @@
 // src/pages/auth/SignIn.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, Car } from 'lucide-react';
@@ -9,7 +9,7 @@ import { Input } from '../../components/ui/Input';
 
 export const SignIn: React.FC = () => {
   const navigate = useNavigate();
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, user, isLoading: authLoading } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -61,6 +61,12 @@ export const SignIn: React.FC = () => {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate('/', { replace: true });
+    }
+  }, [authLoading, navigate, user]);
 
   return (
     <div className="min-h-screen bg-black flex text-white overflow-hidden pt-20 sm:pt-20 lg:pt-24">
@@ -189,6 +195,7 @@ export const SignIn: React.FC = () => {
             {/* Social Logins */}
             <div className="grid grid-cols-1 gap-4">
               <Button
+                type="button"
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2 hover:bg-gray-800/50 hover:text-white transition-all text-sm border-gray-800"
                 onClick={loginWithGoogle}

@@ -1,5 +1,5 @@
 // src/pages/auth/SignUp.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Car, CheckCircle2 } from 'lucide-react';
@@ -9,7 +9,7 @@ import { Input } from '../../components/ui/Input';
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
-  const { signup, loginWithGoogle } = useAuth();
+  const { signup, loginWithGoogle, user, isLoading: authLoading } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -85,6 +85,12 @@ export const SignUp: React.FC = () => {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate('/', { replace: true });
+    }
+  }, [authLoading, navigate, user]);
 
   const benefits = [
     "Exclusive access to premium inventory",
@@ -277,6 +283,7 @@ export const SignUp: React.FC = () => {
             {/* Social Signups */}
             <div className="grid grid-cols-1 gap-4">
               <Button
+                type="button"
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2 hover:bg-gray-800/50 hover:text-white transition-all text-sm border-gray-800"
                 onClick={loginWithGoogle}

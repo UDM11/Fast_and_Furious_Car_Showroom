@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '../types';
-import { supabase } from '../utils/supabaseClient';
+import { supabase, getAppUrl } from '../utils/supabaseClient';
 
 interface AuthContextType {
   user: User | null;
@@ -114,20 +114,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const resetPassword = async (email: string): Promise<boolean> => {
+    const appUrl = getAppUrl();
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: `${appUrl}/auth/reset-password`,
     });
     if (error) throw error;
     return true;
   };
 
   const loginWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+    const appUrl = getAppUrl();
+    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${appUrl}/auth/signin` } });
     if (error) throw error;
   };
 
   const loginWithFacebook = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'facebook', options: { redirectTo: window.location.origin } });
+    const appUrl = getAppUrl();
+    const { error } = await supabase.auth.signInWithOAuth({ provider: 'facebook', options: { redirectTo: `${appUrl}/auth/signin` } });
     if (error) throw error;
   };
 

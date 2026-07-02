@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   ArrowLeft, 
   Heart, 
@@ -13,7 +13,6 @@ import {
   ChevronLeft, 
   ChevronRight,
   Camera,
-  Play,
   Share2,
   Phone,
   Calculator,
@@ -28,7 +27,6 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useInventory } from '../context/InventoryContext';
-import { Car } from '../types';
 import { useBooking } from '../context/BookingContext';
 import { formatNpr } from '../utils/currency';
 import { Card } from '../components/ui/Card';
@@ -40,7 +38,6 @@ export const InventoryDetails: React.FC = () => {
   const { isFavorite, toggleFavorite } = useBooking();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [is360View, setIs360View] = useState(false);
-  const [showFinanceCalculator, setShowFinanceCalculator] = useState(false);
   const { cars } = useInventory();
   const car = cars.find(c => c.id === id);
 
@@ -123,26 +120,26 @@ export const InventoryDetails: React.FC = () => {
         ))}
       </div>
       
-      <div className="relative z-10 pt-24 pb-16">
+      <div className="relative z-10 pt-20 sm:pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Button & Breadcrumb */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
+            className="mb-6 sm:mb-8"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <Button
                 variant="ghost"
                 onClick={() => navigate('/inventory')}
-                className="text-gray-400 hover:text-white group"
+                className="w-full sm:w-auto justify-center sm:justify-start text-gray-400 hover:text-white group"
               >
                 <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
                 Back to Inventory
               </Button>
               
               <motion.div
-                className="flex items-center gap-2 bg-cyan-500/20 backdrop-blur-sm border border-cyan-500/30 rounded-full px-4 py-2"
+                className="flex items-center justify-center gap-2 bg-cyan-500/20 backdrop-blur-sm border border-cyan-500/30 rounded-full px-4 py-2 self-start sm:self-auto"
                 whileHover={{ scale: 1.05 }}
               >
                 <Sparkles className="w-4 h-4 text-cyan-400" />
@@ -151,17 +148,17 @@ export const InventoryDetails: React.FC = () => {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 xl:gap-12 mb-16 items-start">
             {/* Image Gallery */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              className="space-y-4"
+              className="space-y-4 lg:sticky lg:top-28"
             >
               {/* Main Image */}
               <Card className="overflow-hidden group">
                 <div className="relative">
-                  <div className="aspect-w-16 aspect-h-9 bg-gradient-to-br from-gray-800 to-gray-900">
+                  <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] bg-gradient-to-br from-gray-800 to-gray-900">
                     <motion.img
                       key={currentImageIndex}
                       initial={{ opacity: 0, scale: 1.1 }}
@@ -169,18 +166,18 @@ export const InventoryDetails: React.FC = () => {
                       transition={{ duration: 0.5 }}
                       src={car.images[currentImageIndex]}
                       alt={`${car.make} ${car.model}`}
-                      className="w-full h-96 object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
                   
                   {/* Enhanced Controls */}
-                  <div className="absolute top-4 left-4 flex gap-2">
+                  <div className="absolute top-4 left-4 right-4 flex flex-wrap gap-2">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setIs360View(!is360View)}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border transition-all duration-300 ${
+                      className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full backdrop-blur-md border transition-all duration-300 ${
                         is360View 
                           ? 'bg-cyan-500/90 border-cyan-400 text-white shadow-lg shadow-cyan-500/25' 
                           : 'bg-black/40 border-white/20 text-gray-300 hover:text-cyan-400 hover:border-cyan-400/50'
@@ -193,7 +190,7 @@ export const InventoryDetails: React.FC = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md bg-black/40 border border-white/20 text-gray-300 hover:text-white transition-all duration-300"
+                      className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full backdrop-blur-md bg-black/40 border border-white/20 text-gray-300 hover:text-white transition-all duration-300"
                     >
                       <Eye className="w-4 h-4" />
                       <span className="text-sm font-medium">Gallery</span>
@@ -212,17 +209,17 @@ export const InventoryDetails: React.FC = () => {
                         whileHover={{ scale: 1.1, x: -2 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={prevImage}
-                        className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-black/80 transition-all duration-300 border border-white/20 hover:border-cyan-400/50"
+                        className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 p-2.5 sm:p-3 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-black/80 transition-all duration-300 border border-white/20 hover:border-cyan-400/50"
                       >
-                        <ChevronLeft className="w-6 h-6" />
+                        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
                       </motion.button>
                       <motion.button
                         whileHover={{ scale: 1.1, x: 2 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={nextImage}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-black/80 transition-all duration-300 border border-white/20 hover:border-cyan-400/50"
+                        className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 p-2.5 sm:p-3 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-black/80 transition-all duration-300 border border-white/20 hover:border-cyan-400/50"
                       >
-                        <ChevronRight className="w-6 h-6" />
+                        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
                       </motion.button>
                     </>
                   )}
@@ -254,7 +251,7 @@ export const InventoryDetails: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="grid grid-cols-4 gap-3"
+                  className="grid grid-cols-4 gap-2 sm:gap-3"
                 >
                   {car.images.slice(0, 4).map((image, index) => (
                     <motion.button
@@ -262,7 +259,7 @@ export const InventoryDetails: React.FC = () => {
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`aspect-w-16 aspect-h-9 rounded-xl overflow-hidden border-2 transition-all duration-300 group ${
+                      className={`relative aspect-[4/3] sm:aspect-[16/10] rounded-xl overflow-hidden border-2 transition-all duration-300 group ${
                         index === currentImageIndex 
                           ? 'border-cyan-400 shadow-lg shadow-cyan-400/25' 
                           : 'border-white/20 hover:border-cyan-400/50'
@@ -271,7 +268,7 @@ export const InventoryDetails: React.FC = () => {
                       <img
                         src={image}
                         alt={`${car.make} ${car.model} view ${index + 1}`}
-                        className="w-full h-20 object-cover group-hover:scale-110 transition-transform duration-300"
+                        className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     </motion.button>
@@ -288,12 +285,12 @@ export const InventoryDetails: React.FC = () => {
             >
               {/* Header */}
               <div>
-                <div className="flex items-start justify-between mb-6">
-                  <div>
+                <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between mb-6">
+                  <div className="min-w-0">
                     <motion.h1 
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="text-4xl md:text-5xl font-bold text-white mb-3"
+                      className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 leading-tight break-words"
                     >
                       {car.make} <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">{car.model}</span>
                     </motion.h1>
@@ -301,9 +298,9 @@ export const InventoryDetails: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 }}
-                      className="flex items-center gap-4"
+                      className="flex flex-wrap items-center gap-3"
                     >
-                      <p className="text-xl text-gray-400">{car.year}</p>
+                      <p className="text-lg sm:text-xl text-gray-400">{car.year}</p>
                       <div className="flex items-center gap-2 bg-green-500/20 px-3 py-1 rounded-full">
                         <CheckCircle className="w-4 h-4 text-green-400" />
                         <span className="text-green-400 text-sm font-medium">{car.isNew ? 'New' : 'Certified Pre-Owned'}</span>
@@ -311,7 +308,7 @@ export const InventoryDetails: React.FC = () => {
                     </motion.div>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap sm:justify-end">
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -322,34 +319,34 @@ export const InventoryDetails: React.FC = () => {
                           : 'bg-white/10 border-white/20 text-gray-300 hover:text-pink-400 hover:border-pink-400/50'
                       }`}
                     >
-                      <Heart className={`w-6 h-6 ${favorite ? 'fill-current' : ''}`} />
+                        <Heart className={`w-5 h-5 sm:w-6 sm:h-6 ${favorite ? 'fill-current' : ''}`} />
                     </motion.button>
                     
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
-                      className="p-3 bg-white/10 backdrop-blur-sm border border-white/20 text-gray-300 hover:text-cyan-400 hover:border-cyan-400/50 rounded-full transition-all duration-300"
+                        className="p-2.5 sm:p-3 bg-white/10 backdrop-blur-sm border border-white/20 text-gray-300 hover:text-cyan-400 hover:border-cyan-400/50 rounded-full transition-all duration-300"
                     >
-                      <Share2 className="w-6 h-6" />
+                        <Share2 className="w-5 h-5 sm:w-6 sm:h-6" />
                     </motion.button>
                     
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
-                      className="p-3 bg-white/10 backdrop-blur-sm border border-white/20 text-gray-300 hover:text-blue-400 hover:border-blue-400/50 rounded-full transition-all duration-300"
+                        className="p-2.5 sm:p-3 bg-white/10 backdrop-blur-sm border border-white/20 text-gray-300 hover:text-blue-400 hover:border-blue-400/50 rounded-full transition-all duration-300"
                     >
-                      <Download className="w-6 h-6" />
+                        <Download className="w-5 h-5 sm:w-6 sm:h-6" />
                     </motion.button>
                   </div>
                 </div>
 
                 {/* Rating */}
-                <div className="flex items-center space-x-3 mb-6">
+                  <div className="flex flex-wrap items-center gap-3 mb-6">
                   <div className="flex items-center space-x-1">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-5 h-5 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 ${
                           i < Math.floor(car.rating) 
                             ? 'text-yellow-400 fill-current' 
                             : 'text-gray-600'
@@ -367,14 +364,14 @@ export const InventoryDetails: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="mb-8 p-6 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 backdrop-blur-sm border border-cyan-500/30 rounded-2xl"
+                  className="mb-8 p-5 sm:p-6 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 backdrop-blur-sm border border-cyan-500/30 rounded-2xl"
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-4">
+                    <div className="min-w-0">
+                      <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2 break-words">
                         {formatNpr(car.price)}
                       </div>
-                      <div className="flex items-center gap-4 text-sm">
+                      <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm">
                         <span className="text-green-400 flex items-center gap-1">
                           <CheckCircle className="w-4 h-4" />
                           Best price guarantee
@@ -385,7 +382,7 @@ export const InventoryDetails: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                       <p className="text-gray-400 text-sm">Starting from</p>
                       <p className="text-2xl font-bold text-white">{formatNpr(Math.round(car.price * 0.02))}/mo</p>
                       <p className="text-gray-400 text-xs">with approved credit</p>
@@ -405,7 +402,7 @@ export const InventoryDetails: React.FC = () => {
                     <Award className="w-6 h-6 text-cyan-400" />
                     Vehicle Overview
                   </h3>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     {[
                       { icon: Gauge, label: 'Mileage', value: `${car.mileage.toLocaleString()} mi`, color: 'text-cyan-400' },
                       { icon: Fuel, label: 'Fuel Type', value: car.fuel, color: 'text-green-400' },
@@ -417,7 +414,7 @@ export const InventoryDetails: React.FC = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.4 + index * 0.1 }}
-                        className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300 group"
+                        className="flex items-center space-x-3 p-3 sm:p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300 group"
                         whileHover={{ scale: 1.02 }}
                       >
                         <div className={`p-2 rounded-lg bg-gradient-to-br from-gray-800 to-gray-900 ${spec.color} group-hover:scale-110 transition-transform`}>
@@ -441,14 +438,14 @@ export const InventoryDetails: React.FC = () => {
                 className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               >
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button size="lg" onClick={handleTestDrive} className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 shadow-lg shadow-cyan-500/25">
+                  <Button size="lg" onClick={handleTestDrive} className="w-full justify-center bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 shadow-lg shadow-cyan-500/25">
                     <Calendar className="w-5 h-5 mr-2" />
                     Book Test Drive
                   </Button>
                 </motion.div>
                 
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button variant="outline" size="lg" onClick={handleFinanceCalculation} className="w-full border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10">
+                  <Button variant="outline" size="lg" onClick={handleFinanceCalculation} className="w-full justify-center border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10">
                     <Calculator className="w-5 h-5 mr-2" />
                     Calculate Finance
                   </Button>
@@ -460,7 +457,7 @@ export const InventoryDetails: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="grid grid-cols-3 gap-3 mt-4"
+                className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4"
               >
                 {[
                   { icon: MessageCircle, label: 'Chat', color: 'text-green-400' },
@@ -485,9 +482,9 @@ export const InventoryDetails: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
               >
-                <Card className="p-6 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 border-cyan-500/30 backdrop-blur-sm">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
+                <Card className="p-5 sm:p-6 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 border-cyan-500/30 backdrop-blur-sm">
+                  <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-start gap-4">
                       <div className="p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full">
                         <MessageCircle className="w-6 h-6 text-white" />
                       </div>
@@ -501,7 +498,7 @@ export const InventoryDetails: React.FC = () => {
                       </div>
                     </div>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Button variant="outline" size="sm" className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto justify-center border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10">
                         <Phone className="w-4 h-4 mr-2" />
                         Call Now
                       </Button>
@@ -521,14 +518,14 @@ export const InventoryDetails: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="lg:col-span-2"
             >
-              <Card className="p-8">
-                <h2 className="text-2xl font-bold text-white mb-6">Description</h2>
-                <p className="text-gray-300 leading-relaxed mb-8">
+              <Card className="p-6 sm:p-8">
+                <h2 className="text-2xl font-bold text-white mb-4 sm:mb-6">Description</h2>
+                <p className="text-gray-300 leading-relaxed mb-8 text-sm sm:text-base">
                   {car.description}
                 </p>
                 
                 <h3 className="text-lg font-semibold text-white mb-4">Features & Equipment</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {car.features.map((feature, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <Shield className="w-4 h-4 text-cyan-400 flex-shrink-0" />
@@ -547,29 +544,29 @@ export const InventoryDetails: React.FC = () => {
             >
               <Card className="p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">Vehicle History</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
+                <div className="space-y-4 text-sm sm:text-base">
+                  <div className="flex items-start justify-between gap-4">
                     <span className="text-gray-400">Previous Owners</span>
                     <span className="text-white">{car.isNew ? '0' : '1'}</span>
                   </div>
                   
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-start justify-between gap-4">
                     <span className="text-gray-400">Accidents</span>
                     <span className="text-green-400">No reported accidents</span>
                   </div>
                   
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-start justify-between gap-4">
                     <span className="text-gray-400">Service Records</span>
                     <span className="text-green-400">Full history available</span>
                   </div>
                   
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-start justify-between gap-4">
                     <span className="text-gray-400">Title Status</span>
                     <span className="text-green-400">Clean title</span>
                   </div>
                 </div>
                 
-                <Button variant="outline" className="w-full mt-6">
+                <Button variant="outline" className="w-full mt-6 justify-center">
                   View Full Report
                 </Button>
               </Card>
@@ -584,11 +581,11 @@ export const InventoryDetails: React.FC = () => {
               transition={{ delay: 0.6 }}
               className="mb-16"
             >
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 text-center">
                 Similar Vehicles You Might Like
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
                 {recommendedCars.map((recommendedCar, index) => (
                   <motion.div
                     key={recommendedCar.id}
@@ -600,15 +597,15 @@ export const InventoryDetails: React.FC = () => {
                       <img
                         src={recommendedCar.images[0]}
                         alt={`${recommendedCar.make} ${recommendedCar.model}`}
-                        className="w-full h-48 object-cover"
+                        className="w-full h-44 sm:h-48 object-cover"
                       />
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold text-white mb-2">
+                      <div className="p-5 sm:p-6">
+                        <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
                           {recommendedCar.make} {recommendedCar.model}
                         </h3>
                         <p className="text-gray-400 mb-4">{recommendedCar.year}</p>
                         <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                          <span className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
                             {formatNpr(recommendedCar.price)}
                           </span>
                           <Button size="sm">
