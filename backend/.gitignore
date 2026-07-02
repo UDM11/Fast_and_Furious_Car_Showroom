@@ -1,0 +1,15 @@
+# Secrets & credentials
+.env
+service-account.json
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Chroma DB
+chroma_store/
+
+# Data
+data/
