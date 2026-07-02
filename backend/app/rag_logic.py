@@ -8,14 +8,15 @@ from langchain_community.vectorstores import Chroma
 from langchain_core.documents import Document
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Set Chroma DB directory
-CHROMA_DIR = "chroma_store"
+BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CHROMA_DIR = os.path.join(BACKEND_DIR, "chroma_store")
 
 # Set static PDF path
-STATIC_PDF_PATH = "sample.pdf"
+STATIC_PDF_PATH = os.path.join(BACKEND_DIR, "sample.pdf")
   # Make sure this file exists in your project root
 
 # Load and split the PDF

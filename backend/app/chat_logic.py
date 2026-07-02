@@ -9,11 +9,12 @@ from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import OpenAIEmbeddings
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Set Chroma DB directory
-CHROMA_DIR = "chroma_store"
+BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CHROMA_DIR = os.path.join(BACKEND_DIR, "chroma_store")
 
 # Get static vector database
 def get_vectordb():
