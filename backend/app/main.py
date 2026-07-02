@@ -1,10 +1,12 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from app.rag_logic import load_and_split_pdf, embed_and_store
-from app.chat_logic import get_chat_chain
+from app.chat_agent import run_chat_turn
 
-app = FastAPI(title="Static PDF RAG Chatbot")
+app = FastAPI(title="Car Showroom AI Assistant")
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,26 +21,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load and embed static PDF at startup
-STATIC_PDF_PATH = "sample.pdf"
-docs = load_and_split_pdf(STATIC_PDF_PATH)
-embed_and_store(docs)
-
-# Initialize the chat chain
-chat_chain = get_chat_chain()
-
 class ChatRequest(BaseModel):
     question: str
 
+# Global history for PoC single user session.
+# In a real app, this should be keyed by a session ID.
+global_chat_history = []
+
 @app.get("/")
 def root():
-    return {"message": "Static PDF Chatbot is running."}
+    return {"message": "Car Showroom AI Assistant is running."}
 
 @app.post("/chat")
 async def chat_with_bot(request: ChatRequest):
+    global global_chat_history
     try:
-        response = chat_chain.invoke({"question": request.question})
-        answer = response.get("answer") if isinstance(response, dict) else response
-        return {"answer": answer}
+        reply, new_history = run_chat_turn(request.question, global_chat_history)
+        global_chat_history = new_history
+        return {"answer": reply}
     except Exception as e:
         return {"error": str(e)}
