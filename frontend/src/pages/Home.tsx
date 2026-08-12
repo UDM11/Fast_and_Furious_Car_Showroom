@@ -428,7 +428,7 @@ export const Home: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                src="https://www.youtube.com/embed/T48K6pSifN4?autoplay=1"
                 className="w-full h-full"
                 allow="autoplay; encrypted-media"
                 allowFullScreen

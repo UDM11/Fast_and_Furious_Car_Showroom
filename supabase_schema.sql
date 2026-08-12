@@ -113,3 +113,23 @@ create policy "profiles_read_own" on public.user_profiles for select
   using (auth.uid() = id or (select role from public.user_profiles where id = auth.uid()) = 'admin');
 create policy "profiles_update_own" on public.user_profiles for update
   using (auth.uid() = id or (select role from public.user_profiles where id = auth.uid()) = 'admin');
+
+-- 7. CONTACT MESSAGES TABLE
+create table if not exists public.contact_messages (
+  id          uuid primary key default gen_random_uuid(),
+  name        text not null,
+  email       text not null,
+  phone       text,
+  subject     text,
+  car_model   text,
+  preferred_contact text,
+  message     text not null,
+  created_at  timestamptz not null default now()
+);
+
+alter table public.contact_messages enable row level security;
+
+create policy "contact_messages_insert" on public.contact_messages for insert with check (true);
+create policy "contact_messages_select_admin" on public.contact_messages for select
+  using ((select role from public.user_profiles where id = auth.uid()) = 'admin');
+

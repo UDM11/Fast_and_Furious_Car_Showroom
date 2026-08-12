@@ -71,6 +71,13 @@ import { Shield, Clock, CheckCircle, Car, Phone, Mail, ArrowRight } from 'lucide
 
 export const Warranty: React.FC = () => {
   const [activeTab, setActiveTab] = useState<keyof typeof warrantyPlans>('standard');
+  const [formData, setFormData] = useState({ name: '', email: '', question: '' });
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setShowSuccess(true);
+  };
 
   const faqs = [
     {
@@ -255,26 +262,52 @@ export const Warranty: React.FC = () => {
 
           <div className="bg-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold mb-4">Quick Inquiry</h3>
-            <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400"
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400"
-              />
-              <textarea
-                placeholder="Your Question"
-                rows={3}
-                className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400"
-              />
-              <Button className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2 flex items-center justify-center">
-                Send Message <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
+            {showSuccess ? (
+              <div className="text-center py-6 space-y-2">
+                <div className="text-3xl text-green-400">✓</div>
+                <h4 className="font-bold text-white">Inquiry Sent!</h4>
+                <p className="text-gray-300 text-sm">We will get back to you shortly.</p>
+                <Button 
+                  onClick={() => {
+                    setShowSuccess(false);
+                    setFormData({ name: '', email: '', question: '' });
+                  }} 
+                  className="bg-cyan-600 hover:bg-cyan-500 text-white text-xs mt-2 px-3 py-1.5"
+                >
+                  Ask Another
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400 text-sm"
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400 text-sm"
+                  required
+                />
+                <textarea
+                  placeholder="Your Question"
+                  rows={3}
+                  value={formData.question}
+                  onChange={(e) => setFormData(prev => ({ ...prev, question: e.target.value }))}
+                  className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400 text-sm"
+                  required
+                />
+                <Button className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2 flex items-center justify-center" type="submit">
+                  Send Message <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </form>
+            )}
           </div>
         </div>
       </div>

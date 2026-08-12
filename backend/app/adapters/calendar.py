@@ -4,12 +4,68 @@ Matches voice_backend: Cyprus timezone (Asia/Nicosia), business hours 08:00-17:3
 Booking allowed any day; last slot starts at 16:30 (ends 17:30). All appointments 1 hour.
 """
 import os
+import requests
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 from zoneinfo import ZoneInfo
 
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
+
+def insert_supabase_booking(lead: Dict[str, Any], slot_dt: datetime) -> None:
+    """Helper to insert AI booking into Supabase test_drive_bookings table."""
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_ANON_KEY")
+    if not url or not key:
+        print("[Calendar] insert_supabase_booking: missing SUPABASE_URL or SUPABASE_ANON_KEY")
+        return
+    
+    headers = {
+        "apikey": key,
+        "Authorization": f"Bearer {key}",
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+    }
+    
+    # 1. Resolve car_id by matching interested_car/carId with database
+    car_id = None
+    interested_car = lead.get("interested_car") or lead.get("carId") or ""
+    if interested_car:
+        try:
+            res = requests.get(f"{url}/rest/v1/cars", headers=headers, timeout=5)
+            if res.status_code == 200:
+                db_cars = res.json()
+                norm_interested = str(interested_car).lower()
+                for car in db_cars:
+                    make_model = f"{car.get('make', '')} {car.get('model', '')}".lower()
+                    if norm_interested in make_model or make_model in norm_interested or norm_interested == str(car.get("id")).lower():
+                        car_id = car.get("id")
+                        break
+        except Exception as e:
+            print("[Calendar] Error resolving car_id from Supabase:", e)
+            
+    # 2. Extract date and time
+    date_str = slot_dt.strftime("%Y-%m-%d")
+    time_str = slot_dt.strftime("%H:%M")
+    
+    # 3. Construct payload matching table columns
+    payload = {
+        "car_id": car_id,
+        "user_id": None, # AI bookings default to guest/unauthenticated user
+        "date": date_str,
+        "time": time_str,
+        "name": lead.get("name") or "AI Booking",
+        "email": lead.get("email") or "",
+        "phone": lead.get("phone") or "",
+        "status": "pending"
+    }
+    
+    # 4. Insert into test_drive_bookings
+    try:
+        res = requests.post(f"{url}/rest/v1/test_drive_bookings", headers=headers, json=payload, timeout=5)
+        print(f"[Calendar] Inserted AI booking to Supabase. Status: {res.status_code}")
+    except Exception as e:
+        print("[Calendar] Error inserting booking to Supabase:", e)
 
 
 def _normalize_creds_path(value: str) -> str:
@@ -218,6 +274,13 @@ class CalendarAdapter:
         
         if not slot:
             return {"ok": False, "message": "Slot not found"}
+
+        # Insert booking into Supabase test_drive_bookings table
+        try:
+            start_dt = datetime.fromisoformat(slot["datetime"])
+            insert_supabase_booking(lead, start_dt)
+        except Exception as e:
+            print(f"[Calendar] Error saving booking to Supabase: {e}")
         
         # Try to create Google Calendar event
         service = self._get_service()

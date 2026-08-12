@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
+import { insertContactMessage } from '../services/supabaseService';
 
 // Floating particles component for contact
 const ContactParticles: React.FC = () => {
@@ -141,23 +142,32 @@ const ContactUs: React.FC = () => {
     }
 
     try {
-      setTimeout(() => {
-        setSuccess('Your message has been sent successfully!');
-        setIsSubmitted(true);
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: '',
-          carModel: '',
-          phone: '',
-          preferredContact: 'email'
-        });
-        setLoading(false);
-        formRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 2000);
-    } catch {
-      setError('Something went wrong. Please try again later.');
+      await insertContactMessage({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        carModel: formData.carModel === 'Select Car Model' ? '' : formData.carModel,
+        preferredContact: formData.preferredContact,
+        message: formData.message,
+      });
+
+      setSuccess('Your message has been sent successfully!');
+      setIsSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+        carModel: '',
+        phone: '',
+        preferredContact: 'email'
+      });
+      setLoading(false);
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
+    } catch (err: any) {
+      console.error('[ContactUs] Submit error:', err);
+      setError(err?.message || 'Something went wrong. Please try again later.');
       setLoading(false);
       formRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -407,7 +417,7 @@ const ContactUs: React.FC = () => {
                 required
                 className="peer hover:shadow-md transition-shadow"
               />
-              <label className="absolute left-3 top-3 text-gray-400 text-sm peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-cyan-400 peer-focus:text-sm transition-all">
+              <label className="absolute left-3 top-1 text-gray-400 text-xs transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-cyan-400 peer-focus:text-xs">
                 Your Name
               </label>
             </div>
@@ -423,7 +433,7 @@ const ContactUs: React.FC = () => {
                 required
                 className="peer hover:shadow-md transition-shadow"
               />
-              <label className="absolute left-3 top-3 text-gray-400 text-sm peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-cyan-400 peer-focus:text-sm transition-all">
+              <label className="absolute left-3 top-1 text-gray-400 text-xs transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-cyan-400 peer-focus:text-xs">
                 Your Email
               </label>
               {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
@@ -440,7 +450,7 @@ const ContactUs: React.FC = () => {
                 required
                 className="peer hover:shadow-md transition-shadow"
               />
-              <label className="absolute left-3 top-3 text-gray-400 text-sm peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-cyan-400 peer-focus:text-sm transition-all">
+              <label className="absolute left-3 top-1 text-gray-400 text-xs transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-cyan-400 peer-focus:text-xs">
                 Subject
               </label>
             </div>
@@ -473,7 +483,7 @@ const ContactUs: React.FC = () => {
                 rows={12}
                 className="peer w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none resize-none hover:shadow-md transition-shadow"
               ></textarea>
-              <label className="absolute left-3 top-3 text-gray-400 text-sm peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-cyan-400 peer-focus:text-sm transition-all">
+              <label className="absolute left-3 top-1 text-gray-400 text-xs transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-cyan-400 peer-focus:text-xs">
                 Your Message
               </label>
             </div>

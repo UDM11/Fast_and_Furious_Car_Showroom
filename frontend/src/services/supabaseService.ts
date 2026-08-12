@@ -153,7 +153,7 @@ function dbToBooking(row: any): TestDriveBooking {
 function bookingToDb(b: Omit<TestDriveBooking, 'id' | 'createdAt'>) {
   return {
     car_id: b.carId || null,
-    user_id: b.userId || null,
+    user_id: (b.userId && b.userId !== 'guest') ? b.userId : null,
     date: b.date,
     time: b.time,
     name: b.name,
@@ -203,3 +203,42 @@ function carToDb(car: Partial<Car>) {
   if (car.reviews !== undefined) row.reviews = car.reviews;
   return row;
 }
+
+// ─── CONTACT MESSAGES ────────────────────────────────────────────────────────
+export interface ContactMessage {
+  name: string;
+  email: string;
+  phone?: string;
+  subject?: string;
+  carModel?: string;
+  preferredContact?: string;
+  message: string;
+}
+
+export const insertContactMessage = async (msg: ContactMessage): Promise<void> => {
+  const { error } = await supabase
+    .from('contact_messages')
+    .insert([{
+      name: msg.name,
+      email: msg.email,
+      phone: msg.phone || null,
+      subject: msg.subject || null,
+      car_model: msg.carModel || null,
+      preferred_contact: msg.preferredContact || null,
+      message: msg.message
+    }]);
+  if (error) {
+    console.error('[insertContactMessage] error:', error);
+    throw error;
+  }
+};
+
+export const fetchContactMessages = async (): Promise<any[]> => {
+  const { data, error } = await supabase
+    .from('contact_messages')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
+};
+

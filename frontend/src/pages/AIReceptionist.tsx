@@ -19,6 +19,9 @@ import {
   Settings,
   RefreshCw
 } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { useInventory } from '../context/InventoryContext';
+import { formatNpr } from '../utils/currency';
 import { chatAPI } from '../services/api';
 
 interface Message {
@@ -37,6 +40,10 @@ interface QuickAction {
 }
 
 const AIReceptionist: React.FC = () => {
+  const { cars } = useInventory();
+  const [searchParams] = useSearchParams();
+  const [hasInitializedCarGreeting, setHasInitializedCarGreeting] = useState(false);
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -47,11 +54,27 @@ const AIReceptionist: React.FC = () => {
   ]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isListening, setIsListening] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const carId = searchParams.get('car');
+    if (carId && cars.length > 0 && !hasInitializedCarGreeting) {
+      const selectedCar = cars.find(c => c.id === carId);
+      if (selectedCar) {
+        setMessages([
+          {
+            id: 'car-welcome',
+            text: `Hello! I see you are interested in the ${selectedCar.year} ${selectedCar.make} ${selectedCar.model}. I would be happy to tell you more about its specifications, pricing (${formatNpr(selectedCar.price)}), key features, or help you book a test drive. What would you like to know about it?`,
+            sender: 'bot',
+            timestamp: new Date(),
+          }
+        ]);
+        setHasInitializedCarGreeting(true);
+      }
+    }
+  }, [searchParams, cars, hasInitializedCarGreeting]);
 
   const quickActions: QuickAction[] = [
     { id: '1', text: 'Show me available cars', icon: <MessageCircle size={16} />, category: 'inventory' },
@@ -129,13 +152,7 @@ const AIReceptionist: React.FC = () => {
     handleSendMessage(action.text);
   };
 
-  const toggleVoice = () => {
-    setIsListening(!isListening);
-  };
 
-  const toggleSpeaker = () => {
-    setIsSpeaking(!isSpeaking);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 relative overflow-hidden">
@@ -271,29 +288,7 @@ const AIReceptionist: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2">
-                  <motion.button
-                    onClick={toggleVoice}
-                    className={`p-2 rounded-full transition-colors ${
-                      isListening ? 'bg-red-500/20 text-red-400' : 'bg-white/10 text-gray-300'
-                    }`}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-                  </motion.button>
-                  
-                  <motion.button
-                    onClick={toggleSpeaker}
-                    className={`p-2 rounded-full transition-colors ${
-                      isSpeaking ? 'bg-blue-500/20 text-blue-400' : 'bg-white/10 text-gray-300'
-                    }`}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {isSpeaking ? <Volume2 size={18} /> : <VolumeX size={18} />}
-                  </motion.button>
-                </div>
+
               </div>
             </div>
 
@@ -409,15 +404,7 @@ const AIReceptionist: React.FC = () => {
                     className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     disabled={loading}
                   />
-                  {isListening && (
-                    <motion.div
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                    >
-                      <div className="w-2 h-2 bg-red-500 rounded-full" />
-                    </motion.div>
-                  )}
+
                 </div>
                 
                 <motion.button

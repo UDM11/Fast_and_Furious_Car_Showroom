@@ -221,8 +221,47 @@ export const Finance: React.FC = () => {
   };
 
   const downloadPDF = () => {
-    // In a real app, you'd generate and download a PDF
-    alert('PDF download would be implemented with a PDF library like jsPDF');
+    if (!calculation) return;
+    
+    const carName = selectedCarData ? `${selectedCarData.make} ${selectedCarData.model}` : "Custom Selection";
+    const dateStr = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const reportContent = `===================================================
+   FAST & FURIOUS CAR SHOWROOM - FINANCE REPORT
+===================================================
+Generated On : ${dateStr}
+Vehicle      : ${carName}
+Base Price   : ${formatNpr(carPrice)}
+---------------------------------------------------
+LOAN CONFIGURATION:
+Down Payment : ${formatNpr(downPayment)} (${((downPayment / carPrice) * 100).toFixed(1)}%)
+Loan Amount  : ${formatNpr(carPrice - downPayment)}
+Interest Rate: ${interestRate}% APR
+Loan Term    : ${loanTerm} months
+---------------------------------------------------
+ESTIMATED COST BREAKDOWN:
+Monthly Payment: ${formatNpr(calculation.monthlyPayment)} / month
+Total Interest : ${formatNpr(calculation.totalInterest)}
+Total Loan Cost: ${formatNpr(calculation.totalPayment)}
+===================================================
+Thank you for choosing Fast & Furious Car Showroom.
+`;
+
+    const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    const fileName = `FF_Finance_Report_${carName.replace(/\s+/g, '_')}.txt`;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const loanTermOptions = [
@@ -386,7 +425,7 @@ export const Finance: React.FC = () => {
                             {selectedCarData.year}
                           </span>
                           <span className="px-3 py-1 bg-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">
-                            ${selectedCarData.price.toLocaleString()}
+                            {formatNpr(selectedCarData.price)}
                           </span>
                           <span className="px-3 py-1 bg-green-500/20 rounded-full text-green-400 text-sm flex items-center">
                             <Star className="w-3 h-3 mr-1" />
@@ -450,7 +489,7 @@ export const Finance: React.FC = () => {
                           <div className="flex items-center justify-between">
                             <span className="text-gray-400">{car.year}</span>
                             <span className="text-cyan-400 font-semibold">
-                              ${car.price.toLocaleString()}
+                              {formatNpr(car.price)}
                             </span>
                           </div>
                         </div>

@@ -36,3 +36,26 @@ CREATE POLICY "bookings_update_admin" ON public.test_drive_bookings
     user_id = auth.uid()::text
     OR (SELECT role FROM public.user_profiles WHERE id = auth.uid()) = 'admin'
   );
+
+-- STEP 5: Create contact_messages table
+CREATE TABLE IF NOT EXISTS public.contact_messages (
+  id          uuid primary key default gen_random_uuid(),
+  name        text not null,
+  email       text not null,
+  phone       text,
+  subject     text,
+  car_model   text,
+  preferred_contact text,
+  message     text not null,
+  created_at  timestamptz not null default now()
+);
+
+ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "contact_messages_insert" ON public.contact_messages;
+CREATE POLICY "contact_messages_insert" ON public.contact_messages FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "contact_messages_select_admin" ON public.contact_messages;
+CREATE POLICY "contact_messages_select_admin" ON public.contact_messages FOR SELECT
+  USING ((SELECT role FROM public.user_profiles WHERE id = auth.uid()) = 'admin');
+

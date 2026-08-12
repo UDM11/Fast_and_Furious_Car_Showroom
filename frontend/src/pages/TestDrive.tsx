@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform, useInView, useMotionValueEvent } from 'framer-motion';
 import { 
   Calendar, 
@@ -115,6 +115,7 @@ const StepIndicator: React.FC<{ currentStep: number; totalSteps: number }> = ({ 
 };
 
 export const TestDrive: React.FC = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const preSelectedCarId = searchParams.get('car');
   const { addBooking } = useBooking();
@@ -1452,7 +1453,7 @@ export const TestDrive: React.FC = () => {
                     >
                       <Button 
                         variant="outline"
-                        onClick={() => window.location.href = '/inventory'}
+                        onClick={() => navigate('/inventory')}
                         className="group relative overflow-hidden px-8 py-3"
                       >
                         <span className="relative z-10 flex items-center">

@@ -1,121 +1,165 @@
-"""Inventory Adapter - Mock Car Showroom properties (for_sale/lease).
+"""Inventory Adapter - Supabase and fallback static car listings.
 
-Curated list of cars for the chatbot.
+Pulls live vehicle information from Supabase for the AI chat agent.
 """
 import re
+import os
+import requests
 from typing import Any
+from dotenv import load_dotenv
 
-# Mock Car Showroom properties
-CARS_LISTINGS = [
+# Curated list of actual showroom cars as a fallback
+STATIC_CAR_LISTINGS = [
     {
-        "id": "car_001",
+        "id": "1",
         "ref": "INV-001",
-        "title": "2024 Toyota Camry XSE",
-        "brand": "Toyota",
-        "model": "Camry",
-        "body_type": "Sedan",
-        "price": "$34,000",
-        "price_num": 34000,
+        "title": "2023 Ferrari 488 GTB",
+        "brand": "Ferrari",
+        "model": "488 GTB",
+        "body_type": "sports",
+        "price": "$330,000",
+        "price_num": 330000,
         "condition": "New",
-        "year": 2024,
+        "year": 2023,
     },
     {
-        "id": "car_002",
+        "id": "2",
         "ref": "INV-002",
-        "title": "2023 Honda CR-V EX-L",
-        "brand": "Honda",
-        "model": "CR-V",
-        "body_type": "SUV",
-        "price": "$31,500",
-        "price_num": 31500,
+        "title": "2024 Lamborghini Huracán",
+        "brand": "Lamborghini",
+        "model": "Huracán",
+        "body_type": "sports",
+        "price": "$285,000",
+        "price_num": 285000,
         "condition": "New",
-        "year": 2023,
+        "year": 2024,
     },
     {
-        "id": "car_003",
+        "id": "3",
         "ref": "INV-003",
-        "title": "2024 Ford Mustang GT Premium",
-        "brand": "Ford",
-        "model": "Mustang",
-        "body_type": "Coupe",
-        "price": "$52,000",
-        "price_num": 52000,
-        "condition": "New",
-        "year": 2024,
-    },
-    {
-        "id": "car_004",
-        "ref": "INV-004",
-        "title": "2022 BMW 3 Series 330i",
-        "brand": "BMW",
-        "model": "3 Series",
-        "body_type": "Sedan",
-        "price": "$39,900",
-        "price_num": 39900,
-        "condition": "Used",
-        "year": 2022,
-    },
-    {
-        "id": "car_005",
-        "ref": "INV-005",
-        "title": "2024 Tesla Model Y Long Range",
-        "brand": "Tesla",
-        "model": "Model Y",
-        "body_type": "SUV",
-        "price": "$48,990",
-        "price_num": 48990,
-        "condition": "New",
-        "year": 2024,
-    },
-    {
-        "id": "car_006",
-        "ref": "INV-006",
-        "title": "2021 Toyota RAV4 XLE",
-        "brand": "Toyota",
-        "model": "RAV4",
-        "body_type": "SUV",
-        "price": "$26,500",
-        "price_num": 26500,
-        "condition": "Used",
-        "year": 2021,
-    },
-    {
-        "id": "car_007",
-        "ref": "INV-007",
-        "title": "2024 Porsche 911 Carrera",
+        "title": "2023 Porsche Cayenne",
         "brand": "Porsche",
-        "model": "911",
-        "body_type": "Coupe",
-        "price": "$114,400",
-        "price_num": 114400,
-        "condition": "New",
-        "year": 2024,
-    },
-    {
-        "id": "car_008",
-        "ref": "INV-008",
-        "title": "2023 Ford F-150 Lariat",
-        "brand": "Ford",
-        "model": "F-150",
-        "body_type": "Truck",
-        "price": "$61,000",
-        "price_num": 61000,
-        "condition": "New",
+        "model": "Cayenne",
+        "body_type": "suv",
+        "price": "$85,000",
+        "price_num": 85000,
+        "condition": "Used",
         "year": 2023,
     },
     {
-        "id": "car_009",
-        "ref": "INV-009",
-        "title": "2020 Honda Civic Sport",
-        "brand": "Honda",
-        "model": "Civic",
-        "body_type": "Sedan",
-        "price": "$19,800",
-        "price_num": 19800,
+        "id": "4",
+        "ref": "INV-004",
+        "title": "2024 BMW M5 Competition",
+        "brand": "BMW",
+        "model": "M5 Competition",
+        "body_type": "sedan",
+        "price": "$125,000",
+        "price_num": 125000,
+        "condition": "New",
+        "year": 2024,
+    },
+    {
+        "id": "5",
+        "ref": "INV-005",
+        "title": "2023 Mercedes-Benz AMG GT",
+        "brand": "Mercedes-Benz",
+        "model": "AMG GT",
+        "body_type": "sports",
+        "price": "$165,000",
+        "price_num": 165000,
         "condition": "Used",
-        "year": 2020,
+        "year": 2023,
+    },
+    {
+        "id": "6",
+        "ref": "INV-006",
+        "title": "2024 Range Rover Sport",
+        "brand": "Range Rover",
+        "model": "Sport",
+        "body_type": "suv",
+        "price": "$95,000",
+        "price_num": 95000,
+        "condition": "New",
+        "year": 2024,
+    },
+    {
+        "id": "7",
+        "ref": "INV-007",
+        "title": "2024 Tesla Model S Plaid",
+        "brand": "Tesla",
+        "model": "Model S Plaid",
+        "body_type": "sedan",
+        "price": "$89,990",
+        "price_num": 89990,
+        "condition": "New",
+        "year": 2024,
+    },
+    {
+        "id": "8",
+        "ref": "INV-008",
+        "title": "2024 Audi RS e-tron GT",
+        "brand": "Audi",
+        "model": "RS e-tron GT",
+        "body_type": "sedan",
+        "price": "$104,900",
+        "price_num": 104900,
+        "condition": "New",
+        "year": 2024,
     }
 ]
+
+def get_supabase_cars() -> list[dict[str, Any]]:
+    """Fetch live cars from Supabase database."""
+    # Ensure env is loaded
+    load_dotenv()
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_ANON_KEY")
+    if not url or not key:
+        return []
+    
+    headers = {
+        "apikey": key,
+        "Authorization": f"Bearer {key}"
+    }
+    
+    try:
+        res = requests.get(f"{url}/rest/v1/cars", headers=headers, timeout=5)
+        if res.status_code != 200:
+            return []
+        
+        db_cars = res.json()
+        listings = []
+        for idx, car in enumerate(db_cars):
+            make = car.get("make") or ""
+            model = car.get("model") or ""
+            year = car.get("year") or 2024
+            price_num = car.get("price") or 0
+            is_new = car.get("is_new")
+            if is_new is None:
+                # check fallback field casing
+                is_new = car.get("isNew", True)
+            
+            listings.append({
+                "id": car.get("id") or f"car_{idx}",
+                "ref": f"INV-{idx+1:03d}",
+                "title": f"{year} {make} {model}",
+                "brand": make,
+                "model": model,
+                "body_type": car.get("type") or "Sedan",
+                "price": f"${price_num:,}",
+                "price_num": price_num,
+                "condition": "New" if is_new else "Used",
+                "year": year,
+                "engine": car.get("engine") or "",
+                "fuel": car.get("fuel") or "",
+                "transmission": car.get("transmission") or "",
+                "mileage": car.get("mileage") or 0,
+                "description": car.get("description") or "",
+                "features": car.get("features") or [],
+            })
+        return listings
+    except Exception:
+        return []
 
 def _normalize_string(s: str) -> str:
     """Normalize string for matching."""
@@ -149,8 +193,13 @@ class InventoryAdapter:
         if budget_max is not None and not isinstance(budget_max, int):
             budget_max = _price_to_num(str(budget_max)) if budget_max else None
 
+        # Fetch from Supabase, fallback to static showroom listings
+        all_listings = get_supabase_cars()
+        if not all_listings:
+            all_listings = STATIC_CAR_LISTINGS
+
         out = []
-        for p in CARS_LISTINGS:
+        for p in all_listings:
             # Brand filter
             if brand_want and brand_want not in _normalize_string(p.get("brand", "")):
                 continue

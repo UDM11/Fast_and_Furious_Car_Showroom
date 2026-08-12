@@ -79,7 +79,10 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const toggleFavorite = async (carId: string) => {
-    if (!user) return;
+    if (!user) {
+      alert("Please sign in to add vehicles to your favorites list.");
+      return;
+    }
     if (favorites.includes(carId)) {
       await removeFavorite(user.id, carId);
       setFavorites(prev => prev.filter(id => id !== carId));

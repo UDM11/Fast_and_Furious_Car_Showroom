@@ -21,6 +21,13 @@ import {
 export const PerformanceUpgrades: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('engine');
   const [selectedPackage, setSelectedPackage] = useState('stage1');
+  const [formData, setFormData] = useState({ name: '', email: '', vehicleType: '' });
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setShowSuccess(true);
+  };
 
   const categories = [
     { id: 'engine', name: 'Engine Performance', icon: Settings },
@@ -306,28 +313,56 @@ export const PerformanceUpgrades: React.FC = () => {
 
           <div className="bg-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold mb-4">Quick Consultation</h3>
-            <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400"
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400"
-              />
-              <select className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white">
-                <option>Select Vehicle Type</option>
-                <option>Sports Car</option>
-                <option>SUV</option>
-                <option>Sedan</option>
-                <option>Luxury</option>
-              </select>
-              <Button className="w-full bg-yellow-600 hover:bg-yellow-500 text-black">
-                Request Consultation <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
+            {showSuccess ? (
+              <div className="text-center py-8 space-y-2">
+                <div className="text-3xl text-yellow-400">✓</div>
+                <h4 className="font-bold text-white">Consultation Requested!</h4>
+                <p className="text-gray-300 text-sm">We will contact you shortly to schedule your upgrade check.</p>
+                <Button 
+                  onClick={() => {
+                    setShowSuccess(false);
+                    setFormData({ name: '', email: '', vehicleType: '' });
+                  }} 
+                  className="bg-yellow-600 hover:bg-yellow-500 text-black text-xs mt-2 px-3 py-1.5"
+                >
+                  Request Another
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400 text-sm"
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white placeholder-gray-400 text-sm"
+                  required
+                />
+                <select 
+                  value={formData.vehicleType}
+                  onChange={(e) => setFormData(prev => ({ ...prev, vehicleType: e.target.value }))}
+                  className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2 text-white text-sm"
+                  required
+                >
+                  <option value="">Select Vehicle Type</option>
+                  <option value="sports">Sports Car</option>
+                  <option value="suv">SUV</option>
+                  <option value="sedan">Sedan</option>
+                  <option value="luxury">Luxury</option>
+                </select>
+                <Button className="w-full bg-yellow-600 hover:bg-yellow-500 text-black py-2 flex items-center justify-center font-semibold" type="submit">
+                  Request Consultation <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </form>
+            )}
           </div>
         </div>
       </div>

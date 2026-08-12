@@ -5,6 +5,13 @@ import { Calculator, Clock, CheckCircle, Car, Phone, Mail, ArrowRight, CreditCar
 
 export const FinancingService: React.FC = () => {
   const [activeTab, setActiveTab] = useState('calculator');
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setShowSuccess(true);
+  };
+
   const [formData, setFormData] = useState({
     vehiclePrice: '',
     downPayment: '',
@@ -236,8 +243,34 @@ export const FinancingService: React.FC = () => {
             )}
 
             {activeTab === 'apply' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold mb-4">Financing Application</h2>
+              showSuccess ? (
+                <div className="text-center py-12 space-y-4">
+                  <div className="text-5xl text-green-400">✓</div>
+                  <h3 className="text-2xl font-bold text-white">Application Submitted!</h3>
+                  <p className="text-gray-300 max-w-md mx-auto">
+                    Thank you for applying. Our finance department will review your profile and contact you within 24 hours.
+                  </p>
+                  <Button 
+                    onClick={() => {
+                      setShowSuccess(false);
+                      setFormData(prev => ({
+                        ...prev,
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        phone: '',
+                        employmentStatus: '',
+                        annualIncome: ''
+                      }));
+                    }} 
+                    className="bg-cyan-600 hover:bg-cyan-500 text-white mt-4"
+                  >
+                    Apply Again
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <h2 className="text-2xl font-semibold mb-4">Financing Application</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -333,11 +366,11 @@ export const FinancingService: React.FC = () => {
                   </div>
                 </div>
 
-                <Button className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-3">
+                <Button className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-3" type="submit">
                   Submit Application
                 </Button>
-              </div>
-            )}
+              </form>
+            ))}
 
             {activeTab === 'rates' && (
               <div className="space-y-6">

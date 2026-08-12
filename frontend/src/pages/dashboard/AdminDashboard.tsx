@@ -28,7 +28,7 @@ import {
   FileText
 } from 'lucide-react';
 import { formatNpr } from '../../utils/currency';
-import { fetchAllUsers, updateUserRoleInDb } from '../../services/supabaseService';
+import { fetchAllUsers, updateUserRoleInDb, fetchContactMessages } from '../../services/supabaseService';
 
 interface AddCarModalState {
   isOpen: boolean;
@@ -53,7 +53,9 @@ export const AdminDashboard: React.FC = () => {
   const { bookings, updateBooking } = useBooking();
   const { cars, addCar, updateCar, deleteCar } = useInventory();
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'vehicles' | 'bookings' | 'users'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'vehicles' | 'bookings' | 'users' | 'messages'>('overview');
+  const [contactMessages, setContactMessages] = useState<any[]>([]);
+
   
   // Modal State for Add/Edit Car
   const [modalState, setModalState] = useState<AddCarModalState>({
@@ -85,6 +87,10 @@ export const AdminDashboard: React.FC = () => {
         role: u.role || 'user',
       }))))
       .catch(err => console.error('[AdminDashboard] fetchAllUsers error:', err));
+
+    fetchContactMessages()
+      .then(data => setContactMessages(data))
+      .catch(err => console.error('[AdminDashboard] fetchContactMessages error:', err));
   }, []);
 
   const handleToggleUserRole = async (userId: string, currentRole: 'user' | 'admin') => {
@@ -193,6 +199,7 @@ export const AdminDashboard: React.FC = () => {
     { id: 'vehicles', label: 'Manage Vehicles', icon: Car, badge: cars.length },
     { id: 'bookings', label: 'Manage Bookings', icon: Calendar, badge: bookings.filter(b => b.status === 'pending').length },
     { id: 'users', label: 'User Roles', icon: Users, badge: systemUsers.length },
+    { id: 'messages', label: 'Client Messages', icon: FileText, badge: contactMessages.length },
   ] as const;
 
   return (
@@ -604,6 +611,61 @@ export const AdminDashboard: React.FC = () => {
                       </tbody>
                     </table>
                   </div>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* MESSAGES TAB */}
+            {activeTab === 'messages' && (
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-6"
+              >
+                <h3 className="text-xl font-bold flex items-center gap-2">
+                  <FileText className="w-5.5 h-5.5 text-cyan-400" />
+                  Customer Inquiries & Messages
+                </h3>
+
+                <Card className="p-6 bg-gray-900/20 border-gray-850">
+                  {contactMessages.length > 0 ? (
+                    <div className="space-y-4">
+                      {contactMessages.map((msg) => (
+                        <div key={msg.id} className="p-5 rounded-xl bg-gray-900/40 border border-gray-800 hover:border-gray-700 transition-colors">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3">
+                            <div>
+                              <h4 className="text-base font-bold text-white">{msg.name}</h4>
+                              <p className="text-xs text-gray-500">{msg.email} {msg.phone ? `| ${msg.phone}` : ''}</p>
+                            </div>
+                            <span className="text-[11px] text-gray-600 bg-gray-950 px-2.5 py-1 rounded border border-gray-850">
+                              {new Date(msg.created_at).toLocaleString()}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3 text-xs">
+                            <div className="bg-gray-950/40 p-2.5 rounded border border-gray-900 text-gray-400">
+                              <span className="text-gray-600 font-bold block uppercase text-[10px] tracking-wider mb-1">Subject</span>
+                              {msg.subject || 'General Inquiry'}
+                            </div>
+                            <div className="bg-gray-950/40 p-2.5 rounded border border-gray-900 text-gray-400">
+                              <span className="text-gray-600 font-bold block uppercase text-[10px] tracking-wider mb-1">Interested Model</span>
+                              {msg.car_model || 'None Specified'}
+                            </div>
+                            <div className="bg-gray-950/40 p-2.5 rounded border border-gray-900 text-gray-400">
+                              <span className="text-gray-600 font-bold block uppercase text-[10px] tracking-wider mb-1">Pref. Contact</span>
+                              <span className="capitalize">{msg.preferred_contact || 'Email'}</span>
+                            </div>
+                          </div>
+                          <div className="p-3 bg-gray-950/20 rounded border border-gray-900 text-sm text-gray-350 whitespace-pre-line leading-relaxed">
+                            {msg.message}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 text-gray-500">
+                      No contact messages have been received yet.
+                    </div>
+                  )}
                 </Card>
               </motion.div>
             )}
